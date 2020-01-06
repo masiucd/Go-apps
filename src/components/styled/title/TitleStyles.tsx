@@ -5,12 +5,10 @@ interface Props {
 }
 
 export const StyledTitle = styled.div<Props>`
-  /* padding: 1.5em; */
   display: ${({ flex }) => (flex ? 'flex' : '')};
   align-items: ${({ flex }) => (flex ? 'center' : null)};
   justify-content: ${({ flex }) => (flex ? 'center' : null)};
   flex-direction: ${({ flex }) => (flex ? 'column' : null)};
-  border: 2px solid red;
 `;
 
 export const StyledH1 = styled.h1`

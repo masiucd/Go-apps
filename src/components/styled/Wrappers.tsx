@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const PageWrapper = styled.div`
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 1rem;
+  padding-left: 1rem;
   margin-right: auto;
   margin-left: auto;
-
+  min-height: 88vh;
   @media (min-width: 576px) {
     max-width: 540px;
   }
