@@ -1,17 +1,16 @@
-import React from "react"
-import { Link } from "gatsby"
-
-import SEO from "../components/seo"
-
+import React from 'react';
+import SEO from '../components/seo';
+import Layout from '../components/styled/Layout';
+import { PageWrapper } from '../components/styled/Wrappers';
 const IndexPage: React.FC = () => (
   <>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <h1>apa</h1>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}></div>
+    <Layout>
+      <SEO title="Home" />
+      <PageWrapper>
+        <h1>Hi people</h1>
+      </PageWrapper>
+    </Layout>
   </>
-)
+);
 
-export default IndexPage
+export default IndexPage;
