@@ -28,7 +28,7 @@ export const StyledNav = styled.nav`
 
 export const AppTitle = styled.div`
   padding: 0.3em;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Cinzel', serif;
   display: flex;
   align-items: center;
   h3 {

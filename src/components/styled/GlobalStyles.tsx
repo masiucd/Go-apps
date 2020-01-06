@@ -2,7 +2,9 @@ import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
 
-@import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Josefin+Sans:300i,400,400i,600,600i,700,700i&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Josefin+Sans:300i,400,400i,600,600i,700,700i&display=swap'); */
+@import url('https://fonts.googleapis.com/css?family=Kanit:300i,400,500,500i,700,700i,800,800i,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Cinzel:400,700,900&display=swap');
 
 *::before,*::after,*{
   margin: 0;
@@ -18,7 +20,7 @@ export default createGlobalStyle`
     height: 100%;
     display: flex;
     flex-direction: column;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Kanit', sans-serif;
     font-size: 10px;
     }
   main {
@@ -27,9 +29,7 @@ export default createGlobalStyle`
 
   h1,
   h2{
-
-    font-family: 'Barlow Condensed', sans-serif;
-
+    font-family: 'Cinzel', serif;
   }
   p {
     margin-bottom: 1.25rem;
