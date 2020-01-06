@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyledList, SmallListStyles } from './styledNav';
 import navLinks from '../../../utils/navigationLinks';
-import { Link } from 'gatsby';
+import AniLink from 'gatsby-plugin-transition-link/AniLink';
 
 interface P {
   showList?: boolean;
@@ -14,7 +14,9 @@ const NavList: React.FC<P> = ({ showList }) => {
         <StyledList>
           {navLinks.map(link => (
             <li key={link.id}>
-              <Link to={link.url}>{link.text}</Link>
+              <AniLink fade to={link.url}>
+                {link.text}
+              </AniLink>
             </li>
           ))}
         </StyledList>
@@ -22,7 +24,9 @@ const NavList: React.FC<P> = ({ showList }) => {
         <SmallListStyles>
           {navLinks.map(link => (
             <li key={link.id}>
-              <Link to={link.url}>{link.text}</Link>
+              <AniLink fade to={link.url}>
+                {link.text}
+              </AniLink>
             </li>
           ))}
         </SmallListStyles>

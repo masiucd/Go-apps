@@ -4,7 +4,9 @@ export default createGlobalStyle`
 
 /* @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Josefin+Sans:300i,400,400i,600,600i,700,700i&display=swap'); */
 @import url('https://fonts.googleapis.com/css?family=Kanit:300i,400,500,500i,700,700i,800,800i,900&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Cinzel:400,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Niramit:400,400i,500,500i,600&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Pontano+Sans&display=swap');
+
 
 *::before,*::after,*{
   margin: 0;
@@ -28,8 +30,9 @@ export default createGlobalStyle`
   }
 
   h1,
-  h2{
-    font-family: 'Cinzel', serif;
+  h2 {
+    margin-bottom: 0.25rem;
+
   }
   p {
     margin-bottom: 1.25rem;

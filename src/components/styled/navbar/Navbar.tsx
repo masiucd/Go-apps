@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyledNav, AppTitle, SmallList } from './styledNav';
 import NavList from './NavList';
-import { Link } from 'gatsby';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Menu } from 'styled-icons/feather';
 import useToogle from '../../../hooks/useToogle';
+import AniLink from 'gatsby-plugin-transition-link/AniLink';
 
 const navData = graphql`
   query {
@@ -33,9 +33,9 @@ const Navbar: React.FC<Props> = () => {
   return (
     <StyledNav>
       <AppTitle>
-        <Link to="/">
+        <AniLink fade to="/">
           <h3>{data.site.siteMetadata.title} </h3>
-        </Link>
+        </AniLink>
         <Menu size="35" id="menuIcon" onClick={toggleList} />
       </AppTitle>
 

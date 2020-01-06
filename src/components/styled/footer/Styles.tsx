@@ -4,6 +4,7 @@ export const StyledFooter = styled.footer`
   background: none;
   display: flex;
   align-items: center;
+  font-family: 'Pontano Sans', sans-serif;
   @media (min-width: 700px) {
     justify-content: space-between;
   }
@@ -17,10 +18,11 @@ export const StyledFooter = styled.footer`
 export const FooterTitle = styled.section`
   h3 {
     font-size: 3em;
+    letter-spacing: 0.1rem;
   }
   small {
     font-size: 1.1em;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.2rem;
   }
   @media (max-width: 700px) {
     flex-direction: column;

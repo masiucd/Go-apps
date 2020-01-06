@@ -1,9 +1,9 @@
 import styled from 'styled-components';
+import { fadeIn } from '../../../utils/animation';
 
 export const StyledNav = styled.nav`
   padding: 0.8em 0.1em;
   background: none;
-  border: 2px solid red;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,13 +27,21 @@ export const StyledNav = styled.nav`
 `;
 
 export const AppTitle = styled.div`
-  padding: 0.3em;
-  font-family: 'Cinzel', serif;
+  padding: 0.5em;
+  margin: 0 0.3em;
+  font-family: 'Pontano Sans', sans-serif;
   display: flex;
   align-items: center;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  transition: ${({ theme }) => theme.transition.mainTransition};
+  box-shadow: ${({ theme }) => theme.shadow.lightShadow};
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadow.darkShadow};
+  }
   h3 {
     font-size: 3em;
     padding: 0.2em;
+    letter-spacing: 0.1rem;
   }
 `;
 
@@ -48,6 +56,7 @@ export const StyledList = styled.ul`
       text-transform: uppercase;
       transition: ${({ theme }) => theme.transition.mainTransition};
       padding: 0.3em 0.2em;
+      letter-spacing: 0.1rem;
       &:hover {
         color: ${({ theme }) => theme.colors.danger};
         box-shadow: ${({ theme }) => theme.shadow.lightShadow};
@@ -70,6 +79,7 @@ export const SmallListStyles = styled(StyledList)`
   min-height: 170vw;
   justify-content: center;
   align-items: center;
+  animation: ${fadeIn} 300ms ease-in-out;
   li{
     a{
       font-size: 3em;

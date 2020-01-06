@@ -8,6 +8,7 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-typescript`,
     `gatsby-plugin-styled-components`,
+    `gatsby-plugin-transition-link`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -33,4 +34,4 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
-}
+};
