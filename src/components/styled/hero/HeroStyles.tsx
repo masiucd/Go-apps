@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface HeroProps {
-  home?: boolean;
+  home?: string;
 }
 
 export const StyledHero = styled.div<HeroProps>``;

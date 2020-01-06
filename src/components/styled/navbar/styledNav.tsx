@@ -13,7 +13,7 @@ export const StyledNav = styled.nav`
     top: 1rem;
     right: 1rem;
     cursor: pointer;
-    z-index: 5;
+    z-index: 8;
     transition: ${({ theme }) => theme.transition.mainTransition};
     &:hover {
       color: ${({ theme }) => theme.colors.dark};
@@ -57,6 +57,7 @@ export const StyledList = styled.ul`
       transition: ${({ theme }) => theme.transition.mainTransition};
       padding: 0.3em 0.2em;
       letter-spacing: 0.1rem;
+
       &:hover {
         color: ${({ theme }) => theme.colors.danger};
         box-shadow: ${({ theme }) => theme.shadow.lightShadow};
@@ -72,16 +73,20 @@ export const SmallListStyles = styled(StyledList)`
   position: fixed;
   display: flex;
   flex-direction: column;
+  z-index: 5;
+      /* position: relative; */
   /* background: ${({ theme }) => theme.colors.darkRGBA}; */
   background: rgba(55,55,55,0.6);
   top: 0rem;
   width: 100vw;
-  min-height: 170vw;
+  /* min-height: 220vw; */
+  min-height: 100%;
   justify-content: center;
   align-items: center;
   animation: ${fadeIn} 300ms ease-in-out;
   li{
     a{
+      color: ${({ theme }) => theme.colors.white};
       font-size: 3em;
       &:hover{
         box-shadow:none;
