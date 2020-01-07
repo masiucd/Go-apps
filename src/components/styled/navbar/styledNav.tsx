@@ -76,7 +76,7 @@ export const SmallListStyles = styled(StyledList)`
   z-index: 5;
       /* position: relative; */
   /* background: ${({ theme }) => theme.colors.darkRGBA}; */
-  background: rgba(55,55,55,0.6);
+  background: rgba(5,5,5,0.8);
   top: 0rem;
   width: 100vw;
   /* min-height: 220vw; */

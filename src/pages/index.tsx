@@ -1,12 +1,13 @@
 import React from 'react';
 import SEO from '../components/seo';
 import Layout from '../components/styled/Layout';
-import { PageWrapper } from '../components/styled/Wrappers';
+import { PageWrapper, BtnWrapper } from '../components/styled/Wrappers';
 import Title from '../components/styled/title/Title';
 import Hero from '../components/styled/hero/Hero';
 import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
-
+import { BtnPrimary } from '../components/styled/Buttons';
+import AniLink from 'gatsby-plugin-transition-link/AniLink';
 interface HomeProps {
   data: {
     heroBg: {
@@ -23,7 +24,12 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
       <Layout>
         <SEO title="Home" />
         <Hero img={data.heroBg.childImageSharp.fluid} main>
-          <Title mainTitle="Welcome" subTitle="to us" flex />
+          <Title mainTitle="Welcome To" subTitle="Worlds Best" flex light />
+          <BtnWrapper>
+            <AniLink fade to="/contact">
+              <BtnPrimary>contact us</BtnPrimary>
+            </AniLink>
+          </BtnWrapper>
         </Hero>
         <PageWrapper></PageWrapper>
       </Layout>
@@ -33,7 +39,7 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
 
 export const PAGE_QUERY_INDEX = graphql`
   query {
-    heroBg: file(relativePath: { eq: "hero1.jpg" }) {
+    heroBg: file(relativePath: { eq: "hero2.jpeg" }) {
       childImageSharp {
         fluid(quality: 90, maxWidth: 4160) {
           ...GatsbyImageSharpFluid_withWebp

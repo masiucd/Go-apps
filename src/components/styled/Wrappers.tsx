@@ -23,3 +23,14 @@ export const PageWrapper = styled.div`
     max-width: 1140px;
   }
 `;
+
+export const BtnWrapper = styled.section`
+  position: absolute;
+  bottom: 17rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  width: 40rem;
+  display: flex;
+  justify-content: center;
+`;

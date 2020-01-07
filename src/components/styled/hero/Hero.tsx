@@ -44,8 +44,20 @@ const Hero: React.FC<Props> = ({ children, className, img, main }) => {
     </>
   );
 };
+
 export default styled(Hero)`
   min-height: ${props => (props.main ? `calc(100vh - 62px)` : `50vh`)};
+  background: ${props =>
+    props.main
+      ? `linear-gradient(rgba(191, 44, 29, 0.4), rgba(9, 1, 00, 0.7))`
+      : `none`};
+
+  background-position: center;
+  background-size: cover;
+  opacity: 1 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 // <BackgroundImage
 // Tag="section"

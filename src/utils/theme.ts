@@ -15,7 +15,7 @@ const theme: DefaultTheme = {
   colors: {
     primary: '#252525',
     secondary: '#D09B69',
-    danger: '#e14f3f',
+    danger: '#bf2e1d',
     dark: '#A36F44',
     common: '#F7DEB2',
     white: '#fff',
