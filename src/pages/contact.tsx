@@ -6,6 +6,8 @@ import { PageWrapper } from '../components/styled/Wrappers';
 import Hero from '../components/styled/hero/Hero';
 import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
+import Title from '../components/styled/title/Title';
+import { BtnLink } from '../components/styled/Buttons';
 
 interface P {
   data: {
@@ -21,7 +23,12 @@ const ContactPage: React.FC<P> = ({ data }) => {
   return (
     <Layout>
       <SEO title="Contact Us" />
-      <Hero img={data.heroBg.childImageSharp.fluid} />
+      <Hero img={data.heroBg.childImageSharp.fluid} position="bottom">
+        <Title mainTitle="How about" subTitle="send us a message" flex light />
+        <BtnLink fade to="/" position="absolute" top="22rem">
+          Worlds Best
+        </BtnLink>
+      </Hero>
       <PageWrapper>
         <Contact />
       </PageWrapper>

@@ -32,7 +32,7 @@ export const StyledInput = styled.input`
   transition: ${({ theme }) => theme.transition.mainTransition};
   outline: none;
   &:focus {
-    border: ${({ theme }) => theme.colors.danger} 2px solid;
+    border: ${({ theme }) => theme.colors.white} 2px solid;
     box-shadow: ${({ theme }) => theme.shadow.darkShadow};
     width: 60vw;
     height: 2.3rem;
@@ -48,7 +48,7 @@ export const StyledTextField = styled.textarea`
   width: 58vw;
   border-radius: 0.2em;
   height: 8rem;
-  border: 2px solid ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadow.lightShadow};
   transition: ${({ theme }) => theme.transition.mainTransition};
   margin-top: 0.7em;
@@ -56,7 +56,7 @@ export const StyledTextField = styled.textarea`
   &:focus {
     width: 60vw;
     box-shadow: ${({ theme }) => theme.shadow.darkShadow};
-    border: ${({ theme }) => theme.colors.danger} 2px solid;
+    border: ${({ theme }) => theme.colors.primary} 2px solid;
   }
 `;
 

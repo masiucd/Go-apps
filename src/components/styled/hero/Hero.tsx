@@ -22,6 +22,7 @@ interface Props {
   className?: string;
   img: { src: string };
   main?: boolean;
+  position?: boolean;
 }
 
 interface HeroDataProps {
@@ -32,7 +33,13 @@ interface HeroDataProps {
   };
 }
 
-const Hero: React.FC<Props> = ({ children, className, img, main }) => {
+const Hero: React.FC<Props> = ({
+  children,
+  className,
+  img,
+  main,
+  position,
+}) => {
   const data: HeroDataProps = useStaticQuery(HeroData);
   const { fluid } = data.heroBG.childImageSharp;
 
@@ -46,13 +53,14 @@ const Hero: React.FC<Props> = ({ children, className, img, main }) => {
 };
 
 export default styled(Hero)`
-  min-height: ${props => (props.main ? `calc(100vh - 62px)` : `50vh`)};
+  min-height: ${props => (props.main ? `calc(100vh - 84px)` : `50vh`)};
   background: ${props =>
-    props.main
-      ? `linear-gradient(rgba(191, 44, 29, 0.4), rgba(9, 1, 00, 0.7))`
-      : `linear-gradient(rgba(11, 4, 29, 0.6), rgba(9, 1, 20, 0.2))`};
+      props.main
+        ? `linear-gradient(rgba(191, 44, 29, 0.4), rgba(9, 1, 00, 0.7))`
+        : `linear-gradient(rgba(11, 4, 29, 0.6), rgba(9, 1, 20, 0.2))`}fixed
+    no-repeat;
 
-  background-position: center;
+  background-position: ${props => (props.position ? props.position : 'center')};
   background-size: cover;
   opacity: 1 !important;
   display: flex;

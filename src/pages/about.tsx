@@ -22,7 +22,7 @@ const AboutPage: React.FC<AboutProps> = ({ data }) => {
   return (
     <Layout>
       <SEO title="about" />
-      <Hero img={data.heroBg.childImageSharp.fluid}>
+      <Hero img={data.heroBg.childImageSharp.fluid} position="bottom">
         <Title mainTitle="About" subTitle="Worlds Best" flex light bgShadow />
         <BtnLink fade to="/menu" position="absolute" top="22rem">
           Menu
