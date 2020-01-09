@@ -39,7 +39,7 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
 
 export const PAGE_QUERY_INDEX = graphql`
   query {
-    heroBg: file(relativePath: { eq: "hero2.jpeg" }) {
+    heroBg: file(relativePath: { eq: "hero3.jpg" }) {
       childImageSharp {
         fluid(quality: 90, maxWidth: 4160) {
           ...GatsbyImageSharpFluid_withWebp

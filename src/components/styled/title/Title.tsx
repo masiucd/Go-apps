@@ -6,11 +6,12 @@ interface P {
   subTitle?: string;
   flex?: boolean;
   light?: boolean;
+  bgShadow?: boolean;
 }
 
-const Title: React.FC<P> = ({ mainTitle, subTitle, flex, light }) => {
+const Title: React.FC<P> = ({ mainTitle, subTitle, flex, light, bgShadow }) => {
   return (
-    <StyledTitle flex={flex} light={light}>
+    <StyledTitle flex={flex} light={light} bgShadow={bgShadow}>
       <StyledH1> {mainTitle} </StyledH1>
       <StyledH3>{subTitle}</StyledH3>
     </StyledTitle>

@@ -50,7 +50,7 @@ export default styled(Hero)`
   background: ${props =>
     props.main
       ? `linear-gradient(rgba(191, 44, 29, 0.4), rgba(9, 1, 00, 0.7))`
-      : `none`};
+      : `linear-gradient(rgba(11, 4, 29, 0.6), rgba(9, 1, 20, 0.2))`};
 
   background-position: center;
   background-size: cover;

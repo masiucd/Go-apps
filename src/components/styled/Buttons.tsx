@@ -1,6 +1,21 @@
 import styled from 'styled-components';
+import AniLink from 'gatsby-plugin-transition-link/AniLink';
 
-export const BtnPrimary = styled.button`
+interface BtnProps {
+  position?: string;
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  display?: string;
+}
+
+export const BtnPrimary = styled.button<BtnProps>`
+  position: ${({ position }) => (position ? position : null)};
+  top: ${({ top }) => (top ? top : null)};
+  right: ${({ right }) => (right ? right : null)};
+  left: ${({ left }) => (left ? left : null)};
+  bottom: ${({ bottom }) => (bottom ? bottom : null)};
   padding: 0.2em 0.4em;
   width: 14rem;
   margin: 0 auto;
@@ -18,3 +33,5 @@ export const BtnPrimary = styled.button`
     background: ${({ theme }) => theme.colors.white};
   }
 `;
+
+export const BtnLink = styled(AniLink)<BtnProps>``;
