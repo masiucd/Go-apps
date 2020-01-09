@@ -35,6 +35,8 @@ export const StyledH3 = styled.h3`
   font-size: 5em;
   padding: 0.3em;
   letter-spacing: 0.26rem;
+  font-family: 'Satisfy', cursive;
+
   @media (max-width: 400px) {
     font-size: 3em;
   }

@@ -16,7 +16,7 @@ export const StyledNav = styled.nav`
     z-index: 8;
     transition: ${({ theme }) => theme.transition.mainTransition};
     &:hover {
-      color: ${({ theme }) => theme.colors.dark};
+      color: ${({ theme }) => theme.colors.danger};
     }
   }
   @media (min-width: 700px) {
@@ -29,7 +29,8 @@ export const StyledNav = styled.nav`
 export const AppTitle = styled.div`
   padding: 0.5em;
   margin: 0 0.3em;
-  font-family: 'Pontano Sans', sans-serif;
+  /* font-family: 'Pontano Sans', sans-serif; */
+  font-family: 'Satisfy', cursive;
   display: flex;
   align-items: center;
   border: 2px solid ${({ theme }) => theme.colors.primary};

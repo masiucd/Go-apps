@@ -6,8 +6,7 @@ import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Hero from '../components/styled/hero/Hero';
 import { PageWrapper } from '../components/styled/Wrappers';
-import { BtnPrimary } from '../components/styled/Buttons';
-import AniLink from 'gatsby-plugin-transition-link/AniLink';
+import { BtnLink } from '../components/styled/Buttons';
 
 interface AboutProps {
   data: {
@@ -25,11 +24,9 @@ const AboutPage: React.FC<AboutProps> = ({ data }) => {
       <SEO title="about" />
       <Hero img={data.heroBg.childImageSharp.fluid}>
         <Title mainTitle="About" subTitle="Worlds Best" flex light bgShadow />
-        <BtnPrimary position="absolute" top="22rem">
-          <AniLink fade to="menu">
-            Menu
-          </AniLink>
-        </BtnPrimary>
+        <BtnLink fade to="/menu" position="absolute" top="22rem">
+          Menu
+        </BtnLink>
       </Hero>
       <PageWrapper></PageWrapper>
     </Layout>
@@ -38,7 +35,7 @@ const AboutPage: React.FC<AboutProps> = ({ data }) => {
 
 export const PAGE_QUERY = graphql`
   query {
-    heroBg: file(relativePath: { eq: "hero1.jpg" }) {
+    heroBg: file(relativePath: { eq: "eat.jpg" }) {
       childImageSharp {
         fluid(quality: 90, maxWidth: 4160) {
           ...GatsbyImageSharpFluid_withWebp
@@ -48,7 +45,4 @@ export const PAGE_QUERY = graphql`
   }
 `;
 
-const btnStyles = {
-  position: 'absolute',
-};
 export default AboutPage;

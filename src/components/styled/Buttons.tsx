@@ -29,9 +29,34 @@ export const BtnPrimary = styled.button<BtnProps>`
   letter-spacing: 0.1rem;
   cursor: pointer;
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.danger};
     background: ${({ theme }) => theme.colors.white};
   }
 `;
 
-export const BtnLink = styled(AniLink)<BtnProps>``;
+export const BtnLink = styled(AniLink)<BtnProps>`
+  position: ${({ position }) => (position ? position : null)};
+  top: ${({ top }) => (top ? top : null)};
+  right: ${({ right }) => (right ? right : null)};
+  left: ${({ left }) => (left ? left : null)};
+  bottom: ${({ bottom }) => (bottom ? bottom : null)};
+  display: ${({ display }) => (display ? display : null)};
+  text-align: center;
+  padding: 0.2em 0.4em;
+  width: 14rem;
+  margin: 0 auto;
+  background: none;
+  border: ${({ theme }) => theme.colors.white} 2px solid;
+
+  transition: ${({ theme }) => theme.transition.mainTransition};
+  color: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => theme.shadow.lightShadow};
+  font-size: 2em;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.danger};
+    background: ${({ theme }) => theme.colors.white};
+  }
+`;

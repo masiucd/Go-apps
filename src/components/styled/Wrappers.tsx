@@ -6,7 +6,7 @@ export const PageWrapper = styled.div`
   padding-left: 1rem;
   margin-right: auto;
   margin-left: auto;
-  min-height: 88vh;
+  min-height: 50vh;
   @media (min-width: 576px) {
     max-width: 540px;
   }

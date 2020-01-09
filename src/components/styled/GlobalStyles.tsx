@@ -6,6 +6,7 @@ export default createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Kanit:300i,400,500,500i,700,700i,800,800i,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Niramit:400,400i,500,500i,600&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Pontano+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Satisfy&display=swap');
 
 
 *::before,*::after,*{

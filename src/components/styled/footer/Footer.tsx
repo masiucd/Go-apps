@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyledFooter, Icons, FooterTitle } from './Styles';
 import socialIcons from '../../../utils/socialIconst';
 import { useStaticQuery, graphql } from 'gatsby';
+import AniLink from 'gatsby-plugin-transition-link/AniLink';
 
 const footerData = graphql`
   query {
@@ -29,7 +30,9 @@ const Footer: React.FC<Props> = () => {
   return (
     <StyledFooter>
       <FooterTitle>
-        <h3>{data.site.siteMetadata.title}</h3>
+        <AniLink fade to="/home">
+          <h3>{data.site.siteMetadata.title}</h3>
+        </AniLink>
         <small>&#169; Worlds Best {new Date().getFullYear()} </small>
       </FooterTitle>
       <Icons>

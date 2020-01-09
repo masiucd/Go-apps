@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
 export const StyledFooter = styled.footer`
-  background: none;
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.white};
   display: flex;
+  padding: 0.6em;
   align-items: center;
   font-family: 'Pontano Sans', sans-serif;
   @media (min-width: 700px) {
@@ -19,6 +21,8 @@ export const FooterTitle = styled.section`
   h3 {
     font-size: 3em;
     letter-spacing: 0.1rem;
+    font-family: 'Satisfy', cursive;
+    color: ${({ theme }) => theme.colors.white};
   }
   small {
     font-size: 1.1em;
@@ -44,6 +48,7 @@ export const Icons = styled.ul`
   li {
     transition: ${({ theme }) => theme.transition.mainTransition};
     a {
+      color: ${({ theme }) => theme.colors.white};
       transition: ${({ theme }) => theme.transition.mainTransition};
       margin: 0 0.7em;
       &:hover {
