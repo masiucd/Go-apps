@@ -15,13 +15,14 @@ export const StyledInfo = styled.div`
     }
     h3 {
       position: relative;
+      color: ${props => props.theme.colors.secondary};
       &:after {
         content: '';
         width: 20%;
         left: 50%;
         transform: translate(-50%, 0);
         height: 2px;
-        background: red;
+        background: #d09b69;
         position: absolute;
         bottom: 0.8rem;
       }

@@ -1,30 +1,36 @@
 import * as React from 'react';
 import { StyledFoodGrid, GridItem } from './Styles.foodgrid';
+import { useStaticQuery, graphql } from 'gatsby';
+import Img, { FluidObject } from 'gatsby-image';
 
-interface P {}
+const queryData = graphql`
+  query {
+    img: file(relativePath: { eq: "homeGallery/img-1.jpeg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid_tracedSVG
+          # ...GatsbyImageSharpFluid_withWebp_tracedSVG
+        }
+      }
+    }
+  }
+`;
 
-const FoodGrid: React.FC<P> = () => {
+interface Props {
+  img: {
+    childImageSharp: {
+      fluid?: FluidObject | FluidObject[] | undefined;
+    };
+  };
+}
+
+const FoodGrid: React.FC<Props> = () => {
+  const data: Props = useStaticQuery(queryData);
+  // console.log('img', data);
   return (
     <StyledFoodGrid>
       <GridItem className="main">
-        {' '}
-        <img
-          src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=60"
-          alt=""
-        />{' '}
-      </GridItem>
-      <GridItem>
-        {' '}
-        <img
-          src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=60"
-          alt=""
-        />{' '}
-      </GridItem>
-      <GridItem>
-        <img
-          src="https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=60"
-          alt=""
-        />
+        <Img fluid={data.img.childImageSharp.fluid} />
       </GridItem>
     </StyledFoodGrid>
   );
