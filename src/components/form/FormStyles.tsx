@@ -31,6 +31,7 @@ export const StyledInput = styled.input`
   box-shadow: ${({ theme }) => theme.shadow.lightShadow};
   transition: ${({ theme }) => theme.transition.mainTransition};
   outline: none;
+  font-size: 1.2em;
   &:focus {
     border: ${({ theme }) => theme.colors.white} 2px solid;
     box-shadow: ${({ theme }) => theme.shadow.darkShadow};
@@ -48,6 +49,7 @@ export const StyledTextField = styled.textarea`
   width: 58vw;
   border-radius: 0.2em;
   height: 8rem;
+  font-size: 1.2em;
   border: 2px solid ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadow.lightShadow};
   transition: ${({ theme }) => theme.transition.mainTransition};

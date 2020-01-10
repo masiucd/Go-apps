@@ -8,6 +8,8 @@ import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import { BtnPrimary } from '../components/styled/Buttons';
 import AniLink from 'gatsby-plugin-transition-link/AniLink';
+import Info from '../components/styled/info/Info';
+import FoodGrid from '../components/home/FoodGrid/FoodGrid';
 interface HomeProps {
   data: {
     heroBg: {
@@ -31,7 +33,10 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
             </AniLink>
           </BtnWrapper>
         </Hero>
-        <PageWrapper></PageWrapper>
+        <PageWrapper>
+          <Info />
+          <FoodGrid />
+        </PageWrapper>
       </Layout>
     </>
   );

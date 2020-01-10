@@ -8,6 +8,9 @@ interface BtnProps {
   left?: string;
   right?: string;
   display?: string;
+  bg?: string;
+  color?: string;
+  border?: string;
 }
 
 export const BtnPrimary = styled.button<BtnProps>`
@@ -45,11 +48,13 @@ export const BtnLink = styled(AniLink)<BtnProps>`
   padding: 0.2em 0.4em;
   width: 14rem;
   margin: 0 auto;
-  background: none;
-  border: ${({ theme }) => theme.colors.white} 2px solid;
+  background: ${({ bg }) => (bg ? bg : 'none')};
+  border: ${({ theme, border }) =>
+      border === 'dark' ? theme.colors.primary : theme.colors.white}
+    2px solid;
 
   transition: ${({ theme }) => theme.transition.mainTransition};
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme, color }) => (color ? color : theme.colors.white)};
   box-shadow: ${({ theme }) => theme.shadow.lightShadow};
   font-size: 2em;
   text-transform: uppercase;

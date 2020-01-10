@@ -4,9 +4,10 @@ interface Props {
   flex?: boolean;
   light?: boolean;
   bgShadow?: boolean;
+  className?: string;
 }
 
-export const StyledTitle = styled.div<Props>`
+export const StyledTitle = styled.section<Props>`
   display: ${({ flex }) => (flex ? 'flex' : '')};
   align-items: ${({ flex }) => (flex ? 'center' : null)};
   justify-content: ${({ flex }) => (flex ? 'center' : null)};
@@ -23,8 +24,9 @@ export const StyledTitle = styled.div<Props>`
   }
 `;
 
-export const StyledH1 = styled.h1`
+export const StyledH1 = styled.h1<Props>`
   font-size: 6em;
+
   padding: 0.3em 0.1em 0.1em 0.1em;
   letter-spacing: 0.26rem;
   @media (max-width: 400px) {
