@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyledTitle, StyledH1, StyledH3 } from './TitleStyles';
+import { BtnLink } from '../Buttons';
 
 interface P {
   mainTitle: string;
@@ -8,6 +9,9 @@ interface P {
   className?: string;
   light?: boolean;
   bgShadow?: boolean;
+  cta?: boolean;
+  ctaText?: string;
+  linkTo?: string;
 }
 
 const Title: React.FC<P> = ({
@@ -17,6 +21,9 @@ const Title: React.FC<P> = ({
   light,
   bgShadow,
   className,
+  cta,
+  ctaText,
+  linkTo,
 }) => {
   return (
     <StyledTitle
@@ -27,6 +34,11 @@ const Title: React.FC<P> = ({
     >
       <StyledH1> {mainTitle} </StyledH1>
       <StyledH3>{subTitle}</StyledH3>
+      {cta && (
+        <BtnLink link to={linkTo?.toString()}>
+          {ctaText}
+        </BtnLink>
+      )}
     </StyledTitle>
   );
 };

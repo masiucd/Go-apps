@@ -5,8 +5,6 @@ import Title from '../components/styled/title/Title';
 import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Hero from '../components/styled/hero/Hero';
-import { PageWrapper } from '../components/styled/Wrappers';
-import { BtnLink } from '../components/styled/Buttons';
 
 interface MenuProps {
   data: {
@@ -23,11 +21,16 @@ const MenuPage: React.FC<MenuProps> = ({ data }) => {
     <Layout>
       <SEO title="Our Menu" />
       <Hero img={data.heroBg.childImageSharp.fluid}>
-        <Title mainTitle="Our" subTitle="Menu" flex light bgShadow />
-
-        <BtnLink fade to="/contact" position="absolute" top="22rem">
-          Contact Us
-        </BtnLink>
+        <Title
+          mainTitle="Our"
+          subTitle="Menu"
+          flex
+          light
+          bgShadow
+          cta
+          ctaText="About us"
+          linkTo="/about"
+        />
       </Hero>
     </Layout>
   );

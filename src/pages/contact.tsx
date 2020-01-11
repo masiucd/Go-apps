@@ -24,10 +24,15 @@ const ContactPage: React.FC<P> = ({ data }) => {
     <Layout>
       <SEO title="Contact Us" />
       <Hero img={data.heroBg.childImageSharp.fluid} position="bottom">
-        <Title mainTitle="How about" subTitle="send us a message" flex light />
-        <BtnLink fade to="/" position="absolute" top="22rem">
-          Worlds Best
-        </BtnLink>
+        <Title
+          mainTitle="How about"
+          subTitle="send us a message"
+          flex
+          light
+          cta
+          ctaText="Menu"
+          linkTo="/menu"
+        />
       </Hero>
       <PageWrapper>
         <Contact />

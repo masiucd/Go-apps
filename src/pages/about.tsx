@@ -6,7 +6,6 @@ import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Hero from '../components/styled/hero/Hero';
 import { PageWrapper } from '../components/styled/Wrappers';
-import { BtnLink } from '../components/styled/Buttons';
 
 interface AboutProps {
   data: {
@@ -23,10 +22,16 @@ const AboutPage: React.FC<AboutProps> = ({ data }) => {
     <Layout>
       <SEO title="about" />
       <Hero img={data.heroBg.childImageSharp.fluid} position="bottom">
-        <Title mainTitle="About" subTitle="Worlds Best" flex light bgShadow />
-        <BtnLink fade to="/menu" position="absolute" top="22rem">
-          Menu
-        </BtnLink>
+        <Title
+          mainTitle="About"
+          subTitle="Worlds Best"
+          flex
+          light
+          bgShadow
+          cta
+          ctaText="Menu"
+          linkTo="/menu"
+        />
       </Hero>
       <PageWrapper></PageWrapper>
     </Layout>

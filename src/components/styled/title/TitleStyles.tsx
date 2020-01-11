@@ -18,9 +18,15 @@ export const StyledTitle = styled.section<Props>`
   /* width: 100%; */
   background: ${({ bgShadow, theme }) =>
     bgShadow ? `${theme.colors.darkRGBA}` : null};
-  width: ${({ bgShadow }) => (bgShadow ? `60%` : '100%')};
+  width: ${({ bgShadow }) => (bgShadow ? `80%` : '100%')};
 
-  @media (max-width: 400px) {
+  a {
+    margin-top: 2rem;
+  }
+  @media (min-width: 400px) {
+    a {
+      width: 10rem;
+    }
   }
 `;
 

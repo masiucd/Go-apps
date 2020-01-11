@@ -46,7 +46,7 @@ export const BtnLink = styled(AniLink)<BtnProps>`
   display: ${({ display }) => (display ? display : null)};
   text-align: center;
   padding: 0.2em 0.4em;
-  width: 14rem;
+  width: 10rem;
   margin: 0 auto;
   background: ${({ bg }) => (bg ? bg : 'none')};
   border: ${({ theme, border }) =>
@@ -63,5 +63,9 @@ export const BtnLink = styled(AniLink)<BtnProps>`
   &:hover {
     color: ${({ theme }) => theme.colors.danger};
     background: ${({ theme }) => theme.colors.white};
+  }
+
+  @media (min-width: 400px) {
+    width: 14rem;
   }
 `;

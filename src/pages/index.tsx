@@ -6,8 +6,6 @@ import Title from '../components/styled/title/Title';
 import Hero from '../components/styled/hero/Hero';
 import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
-import { BtnPrimary } from '../components/styled/Buttons';
-import AniLink from 'gatsby-plugin-transition-link/AniLink';
 import Info from '../components/styled/info/Info';
 import FoodGrid from '../components/home/FoodGrid/FoodGrid';
 interface HomeProps {
@@ -26,12 +24,15 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
       <Layout>
         <SEO title="Home" />
         <Hero img={data.heroBg.childImageSharp.fluid} main>
-          <Title mainTitle="Welcome To" subTitle="Worlds Best" flex light />
-          <BtnWrapper>
-            <AniLink fade to="/contact">
-              <BtnPrimary>contact us</BtnPrimary>
-            </AniLink>
-          </BtnWrapper>
+          <Title
+            mainTitle="Welcome To"
+            subTitle="Worlds Best"
+            flex
+            light
+            cta
+            ctaText="Contact"
+            linkTo="/contact"
+          />
         </Hero>
         <PageWrapper>
           <Info />
