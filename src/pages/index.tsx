@@ -8,6 +8,7 @@ import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Info from '../components/styled/info/Info';
 import FoodGrid from '../components/home/FoodGrid/FoodGrid';
+import Menu from '../components/home/menu/Menu';
 interface HomeProps {
   data: {
     heroBg: {
@@ -37,6 +38,7 @@ const IndexPage: React.FC<HomeProps> = ({ data }) => {
         <PageWrapper>
           <Info />
           <FoodGrid />
+          <Menu />
         </PageWrapper>
       </Layout>
     </>

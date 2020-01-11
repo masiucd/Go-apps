@@ -5,6 +5,8 @@ import Title from '../components/styled/title/Title';
 import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Hero from '../components/styled/hero/Hero';
+import { PageWrapper } from '../components/styled/Wrappers';
+import Menu from '../components/menu/Menu';
 
 interface MenuProps {
   data: {
@@ -32,6 +34,9 @@ const MenuPage: React.FC<MenuProps> = ({ data }) => {
           linkTo="/about"
         />
       </Hero>
+      <PageWrapper>
+        <Menu />
+      </PageWrapper>
     </Layout>
   );
 };

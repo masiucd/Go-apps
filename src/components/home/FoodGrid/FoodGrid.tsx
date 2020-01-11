@@ -36,7 +36,7 @@ interface Props {
   //     };
   //   }[];
   // };
-  images: {
+  images?: {
     edges: {
       node: SingleNodeImg;
     }[];
@@ -45,7 +45,7 @@ interface Props {
 
 const FoodGrid: React.FC<Props> = () => {
   const data: Props = useStaticQuery(GET_IMAGES);
-  console.log('img', data);
+
   return (
     <StyledFoodGrid>
       {data.images.edges.map((x, idx) => {

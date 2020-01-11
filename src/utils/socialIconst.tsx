@@ -12,17 +12,17 @@ const socialIcons: SocialIcons[] = [
   {
     id: uuid(),
     icon: <Instagram size="35" />,
-    url: '',
+    url: 'https://www.instagram.com/masiuciszek/',
   },
   {
     id: uuid(),
     icon: <Linkedin size="35" />,
-    url: '',
+    url: 'https://www.linkedin.com/in/marcell-ciszek/',
   },
   {
     id: uuid(),
     icon: <Github size="35" />,
-    url: '',
+    url: 'https://github.com/masiuciszek',
   },
 ];
 
