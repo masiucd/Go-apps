@@ -41,7 +41,7 @@ interface P {
   };
 }
 
-const Menu: React.FC<P> = () => {
+const Menu: React.FC = (): JSX.Element => {
   const data: P = useStaticQuery(MENU_QUERY);
   return (
     <StyledMenu>

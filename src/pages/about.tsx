@@ -6,6 +6,7 @@ import { graphql } from 'gatsby';
 import { IFluidObject } from 'gatsby-background-image';
 import Hero from '../components/styled/hero/Hero';
 import { PageWrapper } from '../components/styled/Wrappers';
+import Intro from '../components/about/intro/Intro';
 
 interface AboutProps {
   data: {
@@ -27,13 +28,14 @@ const AboutPage: React.FC<AboutProps> = ({ data }) => {
           subTitle="Worlds Best"
           flex
           light
-          bgShadow
           cta
           ctaText="Menu"
           linkTo="/menu"
         />
       </Hero>
-      <PageWrapper></PageWrapper>
+      <PageWrapper>
+        <Intro />
+      </PageWrapper>
     </Layout>
   );
 };

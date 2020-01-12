@@ -38,6 +38,7 @@ export const StyledMenuItem = styled.div`
   transition: ${({ theme }) => theme.transition.mainTransition};
   &:hover {
     box-shadow: ${({ theme }) => theme.shadow.darkShadow};
+    transform: scale(1.02);
     .body {
       display: flex;
       flex-direction: column;

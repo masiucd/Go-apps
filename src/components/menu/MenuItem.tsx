@@ -27,8 +27,8 @@ const MenuItem: React.FC<P> = ({ data }) => {
         <Img fixed={img.fixed} />
       </StyledMenuItemHead>
       <StyledMenuItemFooter vegetarian={vegiterian}>
-        <span> {name} </span>
-        <span> {price}$ </span>
+        <span>title {name} </span>
+        <span>price: {price}$ </span>
         <span> Vegetarian: {vegiterian ? ' Oui' : ' Noo'}</span>
       </StyledMenuItemFooter>
     </StyledMenuItem>
