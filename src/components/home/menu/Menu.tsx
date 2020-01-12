@@ -4,6 +4,7 @@ import { graphql, useStaticQuery } from 'gatsby';
 import { FixedObject } from 'gatsby-image';
 import MenuItem from './MenuItem';
 import Title from '../../styled/title/Title';
+
 const PRODUCTS_QUERY = graphql`
   {
     dishes: allContentfulMenu {

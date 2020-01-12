@@ -28,7 +28,6 @@ const MenuPage: React.FC<MenuProps> = ({ data }) => {
           subTitle="Menu"
           flex
           light
-          bgShadow
           cta
           ctaText="About us"
           linkTo="/about"
