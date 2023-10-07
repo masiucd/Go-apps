@@ -1,13 +1,13 @@
-# WORLDS BEST
+# Go apps
 
-## Restaurant application
+A repository with different Go apps.
 
-#### tools adn techs
+### Apps
 
-1. React
-2. Typescript
-3. Node js
-4. Sql Lite
-5. Strapi
-6. Gatsby
-7. Styled components
+- [x] [Simple calculator]()
+- [x] [Simple web server]()
+- [x] [Simple web server with templates]()
+- [x] [Reading and writing files]()
+- [x] [Reading and writing JSON files]()
+- [x] [Reading and writing CSV files]()
+- [x] [Weather app]()
