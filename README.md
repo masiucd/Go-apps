@@ -8,6 +8,5 @@ A repository with different Go apps.
 - [x] [Simple web server]()
 - [x] [Simple web server with templates]()
 - [Reading file](./read-file/README.md)
-- [x] [Reading and writing JSON files]()
-- [x] [Reading and writing CSV files]()
 - [x] [Weather app]()
+- [x] [Read CSV file](./read_csv/README.md)
