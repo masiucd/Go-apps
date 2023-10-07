@@ -4,7 +4,7 @@ A repository with different Go apps.
 
 ### Apps
 
-- [x] [Simple calculator]()
+- [Simple calculator](./simple-calculator/README.md)
 - [x] [Simple web server]()
 - [x] [Simple web server with templates]()
 - [x] [Reading and writing files]()
