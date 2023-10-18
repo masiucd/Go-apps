@@ -7,6 +7,6 @@ A repository with different Go apps.
 - [Simple calculator](./simple-calculator/README.md)
 - [x] [Simple web server]()
 - [x] [Simple web server with templates]()
-- [Reading file](./read-file/README.md)
+- [Reading file](io/read-file/README.md)
 - [x] [Weather app]()
-- [x] [Read CSV file](./read_csv/README.md)
+- [x] [Read CSV file](io/read_csv/README.md)
