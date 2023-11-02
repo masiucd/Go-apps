@@ -19,7 +19,7 @@ func main() {
 	}
 
 	m.Subject("Hello Gopher!")
-	m.SetBodyString(mail.TypeTextPlain, "This is the body of the email")
+	m.SetBodyString(mail.TypeTextHTML, "<h1>This is the body of the email</h1>\n <a href='https://www.marcellcd.com'>Marcellcd.com</a>")
 
 	c, err := mail.NewClient("smtp.gmail.com", mail.WithPort(25), mail.WithSMTPAuth(mail.SMTPAuthPlain),
 		mail.WithUsername(config("EMAIL")), mail.WithPassword(config("APP_PASS")),
