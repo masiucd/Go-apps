@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-<<<<<<< HEAD
 	"github.com/joho/godotenv"
 	"net/smtp"
 	"os"
@@ -47,38 +46,6 @@ func main() {
 }
 
 func loadConfig(key string) string {
-=======
-	"net/smtp"
-	"os"
-
-	"github.com/joho/godotenv"
-)
-
-func main() {
-
-	from := config("EMAIL")
-	pass := config("APP_PASS")
-	to := []string{config("EMAIL")}
-	host := "smtp.gmail.com"
-	port := "587"
-	address := host + ":" + port
-
-	subject := "Test email from Go!"
-	body := "This is the body of an email message."
-	message := []byte(subject + "\n" + "https://www.google.com" + "\n" + body)
-
-	auth := smtp.PlainAuth("Hello", from, pass, host)
-
-	err := smtp.SendMail(address, auth, from, to, message)
-
-	if err != nil {
-		panic(err)
-	}
-}
-
-// Config func to get env value
-func config(key string) string {
->>>>>>> cf5d338ee8e5ae8e9a7f42931cbd201d517a952f
 	// load .env file
 	err := godotenv.Load(".env")
 	if err != nil {
