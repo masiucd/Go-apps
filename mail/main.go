@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"net/smtp"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-<<<<<<< HEAD
 	"github.com/joho/godotenv"
 	"net/smtp"
 	"os"

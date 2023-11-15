@@ -1,4 +1,4 @@
-module go-apps.com/send-mail
+module go-apps.com/mail
 
 go 1.21.4
 
