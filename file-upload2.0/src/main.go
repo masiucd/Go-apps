@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 	"go-apps.com/file-upload2.0/src/db"
@@ -29,7 +31,18 @@ func main() {
 				"Title": "Upload File",
 			},
 		)
+	})
 
+	app.Post("/upload", func(c *fiber.Ctx) error {
+		file, err := c.FormFile("file")
+		if err != nil {
+			// TODO render error page with error message
+			fmt.Printf("Failed to get the file: %v\n", err)
+			return c.SendString(err.Error())
+		}
+		fmt.Println("NAME ", file.Filename)
+		fmt.Println("SIZE ", file.Size)
+		return c.Render("index", fiber.Map{"Title": "File Upload"})
 	})
 
 	err := app.Listen(port)

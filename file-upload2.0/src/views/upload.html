@@ -6,6 +6,14 @@
     <title>Upload</title>
   </head>
   <body>
-    <h1>{{.Title}}</h1>
+    <main>
+      <h1>{{.Title}}</h1>
+      <div class="form-wrapper">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </main>
   </body>
 </html>
