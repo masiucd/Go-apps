@@ -21,7 +21,9 @@ func main() {
 	mux := http.NewServeMux()
 
 	fileHandler := http.StripPrefix("/static/", http.FileServer(http.Dir("uploads")))
+	client := http.StripPrefix("/client/", http.FileServer(http.Dir("client")))
 	mux.HandleFunc("/static/", fileHandler.ServeHTTP)
+	mux.HandleFunc("/client/", client.ServeHTTP)
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("GET /upload", uploadView)
 	mux.HandleFunc("POST /upload", upload)
