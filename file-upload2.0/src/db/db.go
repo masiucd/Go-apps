@@ -8,7 +8,6 @@ import (
 type Attachment struct {
 	gorm.Model
 	FileName string
-	UserID   uint
 	Blob     []byte
 }
 

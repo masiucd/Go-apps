@@ -9,7 +9,7 @@ import (
 	"go-apps.com/file-upload2.0/src/db"
 )
 
-const port = ":8000"
+const port = ":4000"
 
 func main() {
 	engine := html.New("./src/views", ".html")
@@ -51,7 +51,7 @@ func main() {
 			fmt.Printf("Failed to open the file: %v\n", err)
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
-		// defer closing the file
+		// closing the file
 		defer f.Close()
 
 		fileBytes, err := io.ReadAll(f)
@@ -60,9 +60,42 @@ func main() {
 			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
 
-		fmt.Println("FILE BYTES ", fileBytes)
+		// store the file in the database
+		db.DB.Create(&db.Attachment{
+			FileName: file.Filename,
+			Blob:     fileBytes,
+		})
 
 		return c.Render("index", fiber.Map{"Title": "File Upload"})
+	})
+
+	// Route to get a file by id and serve it
+	app.Get("/file/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		var attachment db.Attachment
+		db.DB.First(&attachment, id)
+		if attachment.ID == 0 {
+			return c.Status(fiber.StatusNotFound).SendString("File not found")
+		}
+		return c.Send(attachment.Blob)
+	})
+
+	app.Get("/attachments", func(c *fiber.Ctx) error {
+		var attachments []db.Attachment
+		db.DB.Find(&attachments)
+
+		type AttachmentUi struct {
+			ID   uint
+			Name string
+		}
+		var xs []AttachmentUi
+		for _, attachment := range attachments {
+			xs = append(xs, AttachmentUi{attachment.ID, attachment.FileName})
+		}
+		return c.Status(fiber.StatusOK).Render("attachments", fiber.Map{
+			"Title":       "Attachments",
+			"Attachments": xs,
+		})
 	})
 
 	err := app.Listen(port)

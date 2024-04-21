@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Attachments</title>
   </head>
   <body>
     <h1>{{.Title}}</h1>
+    <a href="/"> Home </a>
     <ul>
-      <li><a href="/upload"> Upload files </a></li>
-      <li><a href="/attachments"> Attachments </a></li>
+      {{range .Attachments}}
+      <li>
+        <a href="/file/{{.ID}}" target="_blank">{{.Name}}</a>
+      </li>
+      {{end}}
     </ul>
   </body>
 </html>
