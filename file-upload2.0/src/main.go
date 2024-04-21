@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
@@ -34,14 +35,33 @@ func main() {
 	})
 
 	app.Post("/upload", func(c *fiber.Ctx) error {
+
 		file, err := c.FormFile("file")
 		if err != nil {
 			// TODO render error page with error message
 			fmt.Printf("Failed to get the file: %v\n", err)
-			return c.SendString(err.Error())
+			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 		}
 		fmt.Println("NAME ", file.Filename)
 		fmt.Println("SIZE ", file.Size)
+
+		// open the file
+		f, err := file.Open()
+		if err != nil {
+			fmt.Printf("Failed to open the file: %v\n", err)
+			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+		}
+		// defer closing the file
+		defer f.Close()
+
+		fileBytes, err := io.ReadAll(f)
+		if err != nil {
+			fmt.Printf("Failed to read the file: %v\n", err)
+			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+		}
+
+		fmt.Println("FILE BYTES ", fileBytes)
+
 		return c.Render("index", fiber.Map{"Title": "File Upload"})
 	})
 
