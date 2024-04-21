@@ -14,22 +14,26 @@ type Todo struct {
 	Done  bool
 }
 
-const uploadPath = "uploads"
-const maxUploadSize = 10 << 20 // 10MB
+const port = ":9000"
 
 func main() {
 
 	mux := http.NewServeMux()
+
+	fileHandler := http.StripPrefix("/static/", http.FileServer(http.Dir("uploads")))
+	mux.HandleFunc("/static/", fileHandler.ServeHTTP)
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("GET /upload", uploadView)
 	mux.HandleFunc("POST /upload", upload)
 
-	err := http.ListenAndServe(":9000", mux)
+	err := http.ListenAndServe(port, mux)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
+const uploadPath = "uploads"
+const maxUploadSize = 10 << 20 // 10MB
 func uploadView(w http.ResponseWriter, r *http.Request) {
 	type pageData struct {
 		Title string
