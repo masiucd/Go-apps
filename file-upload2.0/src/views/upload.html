@@ -4,16 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Upload</title>
+    <link rel="stylesheet" href="public/css/main.css" />
   </head>
   <body>
     <main>
       <h1>{{.Title}}</h1>
       <div class="form-wrapper">
         <form action="/upload" method="post" enctype="multipart/form-data">
-          <input type="file" name="file" />
+          <label id="custom-file-upload">
+            <span>Choose a file...</span>
+            <input type="file" name="file" />
+          </label>
           <button type="submit">Upload</button>
         </form>
       </div>
     </main>
+
+    <script src="/public/js/upload.js"></script>
   </body>
 </html>

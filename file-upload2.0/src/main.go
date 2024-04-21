@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
@@ -17,6 +19,13 @@ func main() {
 		Views: engine,
 		// ViewsLayout: "layouts/main",
 	})
+
+	app.Static("/public", "./src/public")
+
+	// read the file contents in src/public by reading the dir
+	files, _ := ioutil.ReadDir("./src/public")
+	fmt.Println(files)
+
 	db.InitDB()
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index",
@@ -77,6 +86,13 @@ func main() {
 		if attachment.ID == 0 {
 			return c.Status(fiber.StatusNotFound).SendString("File not found")
 		}
+
+		// check if attachment is a pdf
+		if strings.Contains(attachment.FileName, ".pdf") {
+			// set the content type to pdf
+			c.Set("Content-Type", "application/pdf")
+		}
+
 		return c.Send(attachment.Blob)
 	})
 
@@ -88,13 +104,13 @@ func main() {
 			ID   uint
 			Name string
 		}
-		var xs []AttachmentUi
+		var attachmentsUi []AttachmentUi
 		for _, attachment := range attachments {
-			xs = append(xs, AttachmentUi{attachment.ID, attachment.FileName})
+			attachmentsUi = append(attachmentsUi, AttachmentUi{attachment.ID, attachment.FileName})
 		}
 		return c.Status(fiber.StatusOK).Render("attachments", fiber.Map{
 			"Title":       "Attachments",
-			"Attachments": xs,
+			"Attachments": attachmentsUi,
 		})
 	})
 
