@@ -1,0 +1,11 @@
+Hello
+World
+CWKS
+123
+Legia
+Warszawa
+Go
+Rust
+JS
+Python
+Java

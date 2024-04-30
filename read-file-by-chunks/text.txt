@@ -1,1 +1,0 @@
-A more efficient approach when reading a file is to read it by chunks. That means we don’t take it all completely in memory but instead we load it by chunking. It’s very important to read large files in chunk to avoid out of memory errors.
