@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -11,10 +12,40 @@ import (
 // 10 is the ASCII code for newline
 func main() {
 
-	data := readFileV1("file.txt")
-	simplePrint(data)
-	printEven(data)
+	// data := readFileV1("file.txt")
+	// simplePrint(data)
+	// printEven(data)
+	res := readFileV2("file.txt")
+	fmt.Println(res)
 
+}
+
+func readFileV2(f string) string {
+	file, err := os.Open(f)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	defer file.Close()
+
+	// Create a new reader
+	r := bufio.NewReader(file)
+	// The buffer size in Go determines how much data you can read from a file at once.
+	// If you set the buffer size to 4 bytes. So we will read 4 bytes of data from the file at a time.
+	buf := make([]byte, 4) // 4 is the buffer size
+	var output strings.Builder
+	for {
+		n, err := r.Read(buf)
+		if n > 0 {
+			output.Write(buf[:n])
+		}
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			log.Fatal(err.Error())
+		}
+	}
+	return output.String()
 }
 
 // readFileV1 reads the file and returns the data as a byte slice
