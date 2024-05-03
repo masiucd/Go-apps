@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
@@ -11,7 +12,25 @@ import (
 )
 
 func welcome(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Welcome to the home page!"))
+	tmpl, err := template.New("index.html").ParseFiles("static/index.html")
+	data := struct {
+		Title       string
+		Description string
+	}{
+		Title:       "Auth app with Go",
+		Description: "Simple auth app using Go and sql-lite",
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Render the template and write the output to the ResponseWriter
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 }
 
 type User struct {
@@ -34,21 +53,22 @@ func userById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	w.Write([]byte("User with id: " + fmt.Sprintf("%d", user.ID) + " username = " + user.Username))
 
 }
 
 func main() {
-	db.ConnectDB()
-	// db, err := sql.Open("sqlite3", "./db.db")
-	// if err != nil {
-	// 	panic(err)
-	// }
+	dir := http.Dir("./static")
+	fs := http.FileServer(dir)
 
-	http.HandleFunc("GET /", welcome)
-	http.HandleFunc("GET /users/{id}", userById)
-	http.ListenAndServe(":9000", nil)
+	mux := http.NewServeMux()
+	mux.Handle("/", fs)
+	mux.HandleFunc("GET /", welcome)
+	mux.HandleFunc("GET /users/{id}", userById)
+	http.ListenAndServe(":9000", mux)
 
 	// defer db.Close()
+	db.ConnectDB()
 
 }
