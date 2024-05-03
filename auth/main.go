@@ -1,8 +1,10 @@
 package main
 
 import (
-	"database/sql"
+	"log"
 	"net/http"
+
+	"go-apps/auth.com/db"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -12,34 +14,34 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func userById(w http.ResponseWriter, r *http.Request) {
+	sql := db.DB
 	id := r.PathValue("id")
-	w.Write([]byte("User with id: " + id))
+	stmt, err := sql.Prepare("select u.username from users u where u.id = ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+	var username string
+	err = stmt.QueryRow("1").Scan(&username)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write([]byte("User with id: " + id + " username = " + username))
+
 }
 
-var DB *sql.DB
-
 func main() {
+	db.ConnectDB()
 	// db, err := sql.Open("sqlite3", "./db.db")
 	// if err != nil {
 	// 	panic(err)
 	// }
-	ConnectDB()
-
-	DB.Exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
 
 	http.HandleFunc("GET /", welcome)
 	http.HandleFunc("GET /users/{id}", userById)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":9000", nil)
 
 	// defer db.Close()
 
-}
-
-func ConnectDB() {
-	db, err := sql.Open("sqlite3", "./db.db")
-	if err != nil {
-		panic(err)
-	}
-	DB = db
-	defer db.Close()
 }
