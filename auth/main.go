@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -13,21 +14,27 @@ func welcome(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome to the home page!"))
 }
 
+type User struct {
+	ID       int
+	Username string
+	Email    string
+}
+
 func userById(w http.ResponseWriter, r *http.Request) {
 	sql := db.DB
 	id := r.PathValue("id")
-	stmt, err := sql.Prepare("select u.username from users u where u.id = ?")
+	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u where u.id = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
-	var username string
-	err = stmt.QueryRow("1").Scan(&username)
+	var user User
+	err = stmt.QueryRow(id).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {
 		log.Fatal(err)
 	}
-	w.Write([]byte("User with id: " + id + " username = " + username))
+	w.Write([]byte("User with id: " + fmt.Sprintf("%d", user.ID) + " username = " + user.Username))
 
 }
 
