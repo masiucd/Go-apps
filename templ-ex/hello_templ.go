@@ -104,7 +104,7 @@ func wrapChildren() templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"wrapper\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<style>\n\tbody{\n\t\tbackground-color: #333;\n\t\tcolor: #fff;\n\t}\n\t\t#wrapper {\n\t\t\tbackground-color: #f0f0f0;\n\t\t\tcolor: #333;\n\t\t\tpadding: 10px;\n\t\t}\n\t\t.some-class {\n\t\t\tbackground-color: #f0f0f0;\n\t\t\tcolor: #333;\n\t\t\tpadding: 10px;\n\t\t}\n\t</style><div id=\"wrapper\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
