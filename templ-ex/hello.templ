@@ -1,0 +1,28 @@
+package main
+
+templ hello(name string, age string, showButton, showChildren bool) {
+	<script type="text/javascript">
+	function someFunction() {
+		console.log('Hello');
+		alert('Hello');
+	}
+	</script>
+	<div class="some-class">
+		<h1>Hello, { name } { age }</h1>
+		if showButton {
+			<button onclick="someFunction(this)">Click me</button>
+		}
+		if showChildren {
+			@wrapChildren() {
+				<p>Child 1</p>
+				<p>Child 2</p>
+			}
+		}
+	</div>
+}
+
+templ wrapChildren() {
+	<div id="wrapper">
+		{ children... }
+	</div>
+}
