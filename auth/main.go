@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -53,14 +52,24 @@ func userById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	tmpl, err := template.New("user.html").ParseFiles("static/user.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	w.Write([]byte("User with id: " + fmt.Sprintf("%d", user.ID) + " username = " + user.Username))
+	err = tmpl.ExecuteTemplate(w, "user.html", user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	// w.Write([]byte("User with id: " + fmt.Sprintf("%d", user.ID) + " username = " + user.Username))
 
 }
 
 func main() {
 	dir := http.Dir("./static")
 	fs := http.FileServer(dir)
+	db.ConnectDB()
 
 	mux := http.NewServeMux()
 	mux.Handle("/", fs)
@@ -69,6 +78,5 @@ func main() {
 	http.ListenAndServe(":9000", mux)
 
 	// defer db.Close()
-	db.ConnectDB()
 
 }
