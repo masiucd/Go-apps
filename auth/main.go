@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -66,6 +67,38 @@ func userById(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func users(w http.ResponseWriter, r *http.Request) {
+	limit := r.URL.Query().Get("limit")
+	fmt.Println("limit", limit)
+	if limit == "" {
+		limit = "10"
+	}
+	sql := db.DB
+	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u limit ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(limit)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var users []User
+	for rows.Next() {
+		var user User
+		err = rows.Scan(&user.ID, &user.Username, &user.Email)
+		if err != nil {
+			log.Fatal(err)
+		}
+		users = append(users, user)
+	}
+
+	// w.Write([]byte("Users with limit: " + limit))
+	w.Write([]byte("Users with limit: " + limit + "\n" + users[0].Username))
+}
+
 func main() {
 	dir := http.Dir("./static")
 	fs := http.FileServer(dir)
@@ -74,6 +107,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", fs)
 	mux.HandleFunc("GET /", welcome)
+	mux.HandleFunc("GET /users", users)
 	mux.HandleFunc("GET /users/{id}", userById)
 	http.ListenAndServe(":9000", mux)
 
