@@ -46,12 +46,17 @@ func userById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer stmt.Close()
 	var user User
 	err = stmt.QueryRow(id).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {
-		log.Fatal(err)
+		templ, err := template.New("error.html").ParseFiles("static/error.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		templ.ExecuteTemplate(w, "error.html", "User not found")
+		return
 	}
 	tmpl, err := template.New("user.html").ParseFiles("static/user.html")
 	if err != nil {
@@ -63,13 +68,10 @@ func userById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	// w.Write([]byte("User with id: " + fmt.Sprintf("%d", user.ID) + " username = " + user.Username))
-
 }
 
 func users(w http.ResponseWriter, r *http.Request) {
 	limit := r.URL.Query().Get("limit")
-	fmt.Println("limit", limit)
 	if limit == "" {
 		limit = "10"
 	}
@@ -81,7 +83,9 @@ func users(w http.ResponseWriter, r *http.Request) {
 	defer stmt.Close()
 
 	rows, err := stmt.Query(limit)
+	fmt.Println("rows", rows)
 	if err != nil {
+
 		log.Fatal(err)
 	}
 	defer rows.Close()
@@ -90,25 +94,36 @@ func users(w http.ResponseWriter, r *http.Request) {
 		var user User
 		err = rows.Scan(&user.ID, &user.Username, &user.Email)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println("error", err)
+			return
 		}
 		users = append(users, user)
 	}
 
-	// w.Write([]byte("Users with limit: " + limit))
-	w.Write([]byte("Users with limit: " + limit + "\n" + users[0].Username))
+	templ, err := template.New("users.html").ParseFiles("static/users.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	templ.ExecuteTemplate(w, "users.html", users)
+
 }
 
 func main() {
 	dir := http.Dir("./static")
 	fs := http.FileServer(dir)
+
 	db.ConnectDB()
+	defer db.DB.Close()
 
 	mux := http.NewServeMux()
 	mux.Handle("/", fs)
 	mux.HandleFunc("GET /", welcome)
 	mux.HandleFunc("GET /users", users)
 	mux.HandleFunc("GET /users/{id}", userById)
+
+	fmt.Println("Server is running on port 9000")
 	http.ListenAndServe(":9000", mux)
 
 	// defer db.Close()
