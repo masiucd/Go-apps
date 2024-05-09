@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"go-apps/auth.com/db"
+	"go-apps/auth.com/input"
 )
 
 func Users(limit int) ([]*db.UserRecord, error) {
@@ -16,4 +17,15 @@ func User(id string) *db.UserRecord {
 	var user db.UserRecord
 	sql.First(&user, id)
 	return &user
+}
+
+func InsertUser(input input.UserInput) {
+	sql := db.DB
+	user := db.UserRecord{
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		Email:     input.Email,
+		Password:  input.Password,
+	}
+	sql.Create(&user)
 }
