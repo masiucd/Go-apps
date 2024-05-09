@@ -11,14 +11,13 @@ import (
 )
 
 func main() {
-	dir := http.Dir("./static")
-	fs := http.FileServer(dir)
+	// dir := http.Dir("./static")
+	// fs := http.FileServer(dir)
 
 	db.ConnectDB()
-	defer db.DB.Close()
 
 	mux := http.NewServeMux()
-	mux.Handle("/", fs)
+	// mux.Handle("/", fs)
 	mux.HandleFunc("GET /users/{id}", routes.UserById)
 	mux.HandleFunc("GET /users", routes.UserById)
 

@@ -1,14 +1,31 @@
 package db
 
-import "database/sql"
+import (
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+)
 
-var DB *sql.DB
+var DB *gorm.DB
+
+type UserRecord struct {
+	gorm.Model
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+}
+
+func (u UserRecord) TableName() string {
+	return "users"
+}
 
 func ConnectDB() {
-	db, err := sql.Open("sqlite3", "./db.db")
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		panic("failed to connect database")
 	}
+	db.AutoMigrate(&UserRecord{})
+
 	DB = db
-	// defer db.Close()
+
 }

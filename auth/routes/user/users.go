@@ -3,16 +3,13 @@ package routes
 import (
 	"go-apps/auth.com/persistence"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	user, err := persistence.User(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	user := persistence.User(id)
 	tmpl, err := template.New("user.html").ParseFiles("static/user.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -26,9 +23,13 @@ func UserById(w http.ResponseWriter, r *http.Request) {
 }
 
 func Users(w http.ResponseWriter, r *http.Request) {
-	limit := r.URL.Query().Get("limit")
-	if limit == "" {
-		limit = "10"
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if limit == 0 {
+		limit = 10
 	}
 	users, err := persistence.Users(limit)
 	if err != nil {

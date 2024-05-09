@@ -2,53 +2,18 @@ package persistence
 
 import (
 	"go-apps/auth.com/db"
-	"log"
 )
 
-type UserRecord struct {
-	ID       int
-	Username string
-	Email    string
-}
-
-func Users(limit string) ([]UserRecord, error) {
+func Users(limit int) ([]*db.UserRecord, error) {
 	sql := db.DB
-	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u limit ?")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	rows, err := stmt.Query(limit)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	var users []UserRecord
-	for rows.Next() {
-		var user UserRecord
-		err = rows.Scan(&user.ID, &user.Username, &user.Email)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, user)
-	}
-
+	var users []*db.UserRecord
+	sql.Limit(limit).Find(&users)
 	return users, nil
 }
 
-func User(id string) (*UserRecord, error) {
+func User(id string) *db.UserRecord {
 	sql := db.DB
-	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u where u.id = ?")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-	var user UserRecord
-	err = stmt.QueryRow(id).Scan(&user.ID, &user.Username, &user.Email)
-	if err != nil {
-		return nil, err
-	}
-	return &user, err
+	var user db.UserRecord
+	sql.First(&user, id)
+	return &user
 }
