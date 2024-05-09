@@ -1,6 +1,7 @@
-package db
+package persistence
 
 import (
+	"go-apps/auth.com/db"
 	"log"
 )
 
@@ -11,7 +12,7 @@ type UserRecord struct {
 }
 
 func Users(limit string) ([]UserRecord, error) {
-	sql := DB
+	sql := db.DB
 	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u limit ?")
 	if err != nil {
 		log.Fatal(err)
@@ -38,7 +39,7 @@ func Users(limit string) ([]UserRecord, error) {
 }
 
 func User(id string) (*UserRecord, error) {
-	sql := DB
+	sql := db.DB
 	stmt, err := sql.Prepare("select u.id, u.username, u.email from users u where u.id = ?")
 	if err != nil {
 		log.Fatal(err)

@@ -19,10 +19,10 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", fs)
-	mux.HandleFunc("GET /users", routes.UserById)
 	mux.HandleFunc("GET /users/{id}", routes.UserById)
+	mux.HandleFunc("GET /users", routes.UserById)
 
-	fmt.Println("Server is running on port 9000")
-	http.ListenAndServe(":9000", mux)
+	fmt.Println("Server is running on port 4000")
+	http.ListenAndServe(":4000", mux)
 
 }

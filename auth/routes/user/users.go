@@ -1,14 +1,14 @@
 package routes
 
 import (
-	"go-apps/auth.com/db"
+	"go-apps/auth.com/persistence"
 	"net/http"
 	"text/template"
 )
 
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	user, err := db.User(id)
+	user, err := persistence.User(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -18,6 +18,7 @@ func UserById(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Content-Type", "text/html")
 	err = tmpl.ExecuteTemplate(w, "user.html", user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -29,8 +30,7 @@ func Users(w http.ResponseWriter, r *http.Request) {
 	if limit == "" {
 		limit = "10"
 	}
-
-	users, err := db.Users(limit)
+	users, err := persistence.Users(limit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -40,6 +40,10 @@ func Users(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	templ.ExecuteTemplate(w, "users.html", users)
+	w.Header().Set("Content-Type", "text/html")
+	err = templ.ExecuteTemplate(w, "users.html", users)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 }
