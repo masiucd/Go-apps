@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"go-apps/auth.com/api"
 	"go-apps/auth.com/db"
 	routes "go-apps/auth.com/routes/user"
 
@@ -20,6 +21,8 @@ func main() {
 	// mux.Handle("/", fs)
 	mux.HandleFunc("GET /users/{id}", routes.UserById)
 	mux.HandleFunc("GET /users", routes.UserById)
+	mux.HandleFunc("GET /signup", routes.SignUp)
+	mux.HandleFunc("POST /create-user", api.CreateUser)
 
 	fmt.Println("Server is running on port 4000")
 	http.ListenAndServe(":4000", mux)
