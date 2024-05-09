@@ -1,5 +1,7 @@
 
 # ignore tmp folder
 tmp/
-tmp/*
-tmp/**
+
+
+
+
