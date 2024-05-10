@@ -6,6 +6,12 @@
     <title>Sign up</title>
   </head>
   <body>
-    <form action="" method="post"></form>
+    <form action="/create-user" enctype="multipart/form-data" method="post">
+      <input type="text" name="firstname" placeholder="First name" />
+      <input type="text" name="lastname" placeholder="Last name" />
+      <input type="email" name="email" placeholder="Email" />
+      <input type="password" name="password" placeholder="Password" />
+      <button type="submit">Sign up</button>
+    </form>
   </body>
 </html>
