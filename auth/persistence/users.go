@@ -19,7 +19,7 @@ func User(id string) *db.UserRecord {
 	return &user
 }
 
-func InsertUser(input input.UserInput) {
+func InsertUser(input input.UserInput) error {
 	sql := db.DB
 	user := db.UserRecord{
 		FirstName: input.FirstName,
@@ -27,5 +27,6 @@ func InsertUser(input input.UserInput) {
 		Email:     input.Email,
 		Password:  input.Password,
 	}
-	sql.Create(&user)
+	record := sql.Create(&user)
+	return record.Error
 }

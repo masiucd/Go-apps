@@ -42,6 +42,9 @@ func Users(w http.ResponseWriter, r *http.Request) {
 
 // Renders the page where a user can Sign up
 func SignUp(w http.ResponseWriter, r *http.Request) {
-	// get the formData from the user
 	lib.ExecuteTemplate("signup", w)
+}
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	lib.ExecuteTemplate("login", w)
 }

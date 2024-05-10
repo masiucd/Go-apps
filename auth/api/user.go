@@ -1,26 +1,37 @@
 package api
 
 import (
-	"fmt"
+	"go-apps/auth.com/input"
+	"go-apps/auth.com/persistence"
 	"net/http"
 )
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 
-	// Parse form data and get firstname and lastname
 	r.ParseForm()
-	fmt.Println(r.Form)
-	fmt.Println(r.Form["firstname"])
-	fmt.Println(r.Form["lastname"])
-	fmt.Println(r.Form["email"])
-	fmt.Println(r.Form["password"])
-	// fmt.Println("path", r.URL.Path)
-	// fmt.Println("scheme", r.URL.Scheme)
-	// fmt.Println(r.Form["url_long"])
 
-	// var input input.UserInput
+	formValue := getFormValue(r)
+	input := input.UserInput{
+		FirstName: formValue("firstname"),
+		LastName:  formValue("lastname"),
+		Email:     formValue("email"),
+		Password:  formValue("password"),
+	}
 
-	// Create user and
+	error := persistence.InsertUser(input)
+	if error != nil {
+		http.Error(w, error.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 
-	// Redirect to user profile page
+}
+
+func getFormValue(r *http.Request) func(key string) string {
+	return func(key string) string {
+		if val, ok := r.Form[key]; ok {
+			return val[0]
+		}
+		return ""
+	}
 }

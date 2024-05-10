@@ -13,6 +13,7 @@ func Init() *http.ServeMux {
 	mux.HandleFunc("GET /users/{id}", routes.UserById)
 	mux.HandleFunc("GET /users", routes.UserById)
 	mux.HandleFunc("GET /signup", routes.SignUp)
+	mux.HandleFunc("GET /login", routes.Login)
 	mux.HandleFunc("POST /create-user", api.CreateUser)
 
 	return mux

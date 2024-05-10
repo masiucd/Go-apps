@@ -13,8 +13,6 @@ import (
 )
 
 func main() {
-	// dir := http.Dir("./static")
-	// fs := http.FileServer(dir)
 
 	db.ConnectDB()
 	mux := routes.Init()
