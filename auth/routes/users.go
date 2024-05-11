@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"go-apps/auth.com/db"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
+	"go-apps/auth.com/model"
 	"go-apps/auth.com/persistence"
 	"net/http"
 	"strconv"
@@ -46,36 +48,45 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	lib.ExecuteTemplate("signup", w)
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
-	lib.ExecuteTemplate("login", w)
-}
-
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-
 	r.ParseForm()
+	formValue := lib.GetFormValue(r)
 
-	formValue := getFormValue(r)
+	firstName := formValue("firstname")
+	lastName := formValue("lastname")
+	email := formValue("email")
+	password := formValue("password")
+
+	if !lib.AllFieldsValid(firstName, lastName, email, password) {
+		lib.ExecuteTemplateWithData("error", w, "All fields are required")
+		return
+	}
+
+	sql := db.DB
+	var user model.UserRecord
+	result := sql.Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		lib.ExecuteTemplateWithData("error", w, "User already exists")
+		return
+	}
+
+	hashedPassword, err := lib.HashPassword(password)
+	if err != nil {
+		lib.ExecuteTemplateWithData("error", w, "Error creating user")
+		return
+	}
 	input := input.UserInput{
-		FirstName: formValue("firstname"),
-		LastName:  formValue("lastname"),
-		Email:     formValue("email"),
-		Password:  formValue("password"),
+		FirstName: firstName,
+		LastName:  lastName,
+		Email:     email,
+		Password:  hashedPassword,
 	}
 
 	error := persistence.InsertUser(input)
 	if error != nil {
-		http.Error(w, error.Error(), http.StatusInternalServerError)
+		lib.ExecuteTemplateWithData("error", w, "Error creating user")
 		return
 	}
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 
-}
-
-func getFormValue(r *http.Request) func(key string) string {
-	return func(key string) string {
-		if val, ok := r.Form[key]; ok {
-			return val[0]
-		}
-		return ""
-	}
 }

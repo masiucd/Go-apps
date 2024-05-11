@@ -7,9 +7,22 @@
   </head>
   <body>
     <form action="/create-user" enctype="multipart/form-data" method="post">
+      <label for="firstname">
+        <span>First name</span>
+      </label>
       <input type="text" name="firstname" placeholder="First name" />
+
+      <label for="lastname">
+        <span>Last name</span>
+      </label>
       <input type="text" name="lastname" placeholder="Last name" />
+      <label for="email">
+        <span>Email</span>
+      </label>
       <input type="email" name="email" placeholder="Email" />
+      <label for="password">
+        <span>Password</span>
+      </label>
       <input type="password" name="password" placeholder="Password" />
       <button type="submit">Sign up</button>
     </form>
