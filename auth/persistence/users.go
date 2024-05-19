@@ -1,12 +1,12 @@
 package persistence
 
 import (
-	"fmt"
 	"go-apps/auth.com/db"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/model"
 )
 
+// Users returns a list of users
 func Users(limit int) ([]*model.UserRecord, error) {
 	sql := db.DB
 	var users []*model.UserRecord
@@ -21,6 +21,7 @@ func User(id string) *model.UserRecord {
 	return &user
 }
 
+// InsertUser inserts a user into the database
 func InsertUser(input input.UserInput) error {
 	sql := db.DB
 	user := model.UserRecord{
@@ -33,15 +34,11 @@ func InsertUser(input input.UserInput) error {
 	return record.Error
 }
 
-// DoesUserExist
+// DoesUserExist checks if a user exists in the database
 func DoesUserExist(email string) bool {
 	sql := db.DB
 	var user model.UserRecord
-	fmt.Println("email", email)
 	result := sql.Where("email = ?", email).First(&user)
-	fmt.Println("result.RowsAffected", result.RowsAffected)
-	fmt.Println("user", user.FirstName)
-
+	// if RowsAffected is greater than 0, then the user exists
 	return result.RowsAffected > 0
-
 }
