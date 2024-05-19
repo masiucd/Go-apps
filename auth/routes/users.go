@@ -1,10 +1,9 @@
 package routes
 
 import (
-	"go-apps/auth.com/db"
+	"fmt"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
-	"go-apps/auth.com/model"
 	"go-apps/auth.com/persistence"
 	"net/http"
 	"strconv"
@@ -49,35 +48,46 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	formValue := lib.GetFormValue(r)
+	err := r.ParseForm()
+	if err != nil {
+		lib.ExecuteTemplateWithData("signup", w, "Error parsing form")
+		return
+	}
+	fmt.Println("r.Form", r.Form)
 
-	firstName := formValue("firstname")
-	lastName := formValue("lastname")
-	email := formValue("email")
-	password := formValue("password")
+	firstname := r.FormValue("firstname")
+	lastname := r.FormValue("lastname")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
 
-	if !lib.AllFieldsValid(firstName, lastName, email, password) {
-		lib.ExecuteTemplateWithData("error", w, "All fields are required")
+	fmt.Println(
+		"firstname", firstname,
+		"lastname", lastname,
+		"email", email,
+		"password", password,
+	)
+
+	if firstname == "" || lastname == "" || email == "" || password == "" {
+		lib.ExecuteTemplateWithData("signup", w, "All fields are required")
 		return
 	}
 
-	sql := db.DB
-	var user model.UserRecord
-	result := sql.Where("email = ?", email).First(&user)
-	if result.Error != nil {
-		lib.ExecuteTemplateWithData("error", w, "User already exists")
+	exists := persistence.DoesUserExist(email)
+	if exists {
+		fmt.Println("DoesUserExist ", exists)
+		lib.ExecuteTemplateWithData("signup", w, "User already exists")
 		return
 	}
 
 	hashedPassword, err := lib.HashPassword(password)
+	fmt.Println("hashedPassword", hashedPassword)
 	if err != nil {
 		lib.ExecuteTemplateWithData("error", w, "Error creating user")
 		return
 	}
 	input := input.UserInput{
-		FirstName: firstName,
-		LastName:  lastName,
+		FirstName: firstname,
+		LastName:  lastname,
 		Email:     email,
 		Password:  hashedPassword,
 	}
