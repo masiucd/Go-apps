@@ -4,42 +4,63 @@ import (
 	"fmt"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
+	"go-apps/auth.com/model"
 	"go-apps/auth.com/persistence"
 	"net/http"
 	"strconv"
-	"text/template"
 )
+
+type ErrorData struct {
+	Message string
+	Code    int
+}
 
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	user := persistence.User(id)
-	tmpl, err := template.New("user.html").ParseFiles("static/user.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if user == nil {
+		data := ErrorData{
+			Message: "User not found",
+			Code:    http.StatusNotFound,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
-	err = tmpl.ExecuteTemplate(w, "user.html", user)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	lib.ExecuteTemplateWithData("user", w, user)
+
 }
 
 func Users(w http.ResponseWriter, r *http.Request) {
-	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	limitQuery := r.URL.Query().Get("limit")
+	if limitQuery == "" {
+		limitQuery = "10"
+	}
+	limit, err := strconv.Atoi(limitQuery)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
-	if limit == 0 {
-		limit = 10
 	}
 	users, err := persistence.Users(limit)
+
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		data := ErrorData{
+			Message: "Error fetching users",
+			Code:    http.StatusInternalServerError,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
-	lib.ExecuteTemplateWithData("users", w, users)
+	fmt.Println(users[0].LastName)
+	data := struct {
+		Users []*model.UserRecord
+		Title string
+	}{
+		Users: users,
+		Title: "Users",
+	}
+
+	lib.ExecuteTemplateWithData("users", w, data)
+
 }
 
 // Renders the page where a user can Sign up
@@ -53,19 +74,11 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		lib.ExecuteTemplateWithData("signup", w, "Error parsing form")
 		return
 	}
-	fmt.Println("r.Form", r.Form)
 
 	firstname := r.FormValue("firstname")
 	lastname := r.FormValue("lastname")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-
-	fmt.Println(
-		"firstname", firstname,
-		"lastname", lastname,
-		"email", email,
-		"password", password,
-	)
 
 	if firstname == "" || lastname == "" || email == "" || password == "" {
 		lib.ExecuteTemplateWithData("signup", w, "All fields are required")
@@ -80,9 +93,13 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	hashedPassword, err := lib.HashPassword(password)
-	fmt.Println("hashedPassword", hashedPassword)
+
 	if err != nil {
-		lib.ExecuteTemplateWithData("error", w, "Error creating user")
+		data := ErrorData{
+			Message: "Error creating user",
+			Code:    http.StatusInternalServerError,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
 	input := input.UserInput{
@@ -94,9 +111,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	error := persistence.InsertUser(input)
 	if error != nil {
-		lib.ExecuteTemplateWithData("error", w, "Error creating user")
+		data := ErrorData{
+			Message: "Error creating user",
+			Code:    http.StatusInternalServerError,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
-
 }
