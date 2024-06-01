@@ -10,15 +10,21 @@ import (
 func Users(limit int) ([]*model.UserRecord, error) {
 	sql := db.DB
 	var users []*model.UserRecord
-	sql.Limit(limit).Find(&users)
+	result := sql.Limit(limit).Find(&users)
+	if result.Error != nil {
+		return []*model.UserRecord{}, result.Error
+	}
 	return users, nil
 }
 
 func User(id string) *model.UserRecord {
 	sql := db.DB
-	var user model.UserRecord
-	sql.First(&user, id)
-	return &user
+	var user *model.UserRecord
+	result := sql.First(&user, id)
+	if result.Error != nil {
+		return nil
+	}
+	return user
 }
 
 // InsertUser inserts a user into the database
