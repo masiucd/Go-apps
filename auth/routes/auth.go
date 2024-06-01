@@ -5,22 +5,12 @@ import (
 	"net/http"
 )
 
-// Login renders the login page
+// Login renders the login page - GET request
 func Login(w http.ResponseWriter, r *http.Request) {
-	// r.ParseForm()
-	// formValue := lib.GetFormValue(r)
-	// email := formValue("email")
-	// password := formValue("password")
-	// if !lib.AllFieldsValid(email, password) {
-	// 	lib.ExecuteTemplateWithData("error", w, "All fields are required")
-	// 	return
-	// }
-
-	// var user model.UserRecord
-	// lib.ExecuteTemplateWithData("profile", w, user)
 	lib.ExecuteTemplate("login", w)
 }
 
+// LoginUser logs in a user - POST request
 func LoginUser(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	formValue := lib.GetFormValue(r)
@@ -36,7 +26,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	lib.ExecuteTemplate("login", w)
 }
 
-// Logout logs out a user
+// Logout logs out a user - POST request
+// TODO - Implement this
 func Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
