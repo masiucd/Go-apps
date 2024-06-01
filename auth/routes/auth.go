@@ -2,6 +2,7 @@ package routes
 
 import (
 	"go-apps/auth.com/lib"
+	"go-apps/auth.com/persistence"
 	"net/http"
 )
 
@@ -21,9 +22,29 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// var user model.UserRecord
-	// lib.ExecuteTemplateWithData("profile", w, user)
-	lib.ExecuteTemplate("login", w)
+	user := persistence.UserByEmail(email)
+	if user == nil {
+		data := lib.ErrorData{
+			Message: "User does not exist",
+			Code:    http.StatusNotFound,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
+		return
+	}
+
+	ok := lib.VerifyPassword(password, user.Password)
+	if !ok {
+		data := lib.ErrorData{
+			Message: "Invalid credentials",
+			Code:    http.StatusUnauthorized,
+		}
+		lib.ExecuteTemplateWithData("error", w, data)
+		return
+	}
+
+	// TODO - Implement session management
+
+	http.Redirect(w, r, "/profile", http.StatusSeeOther)
 }
 
 // Logout logs out a user - POST request

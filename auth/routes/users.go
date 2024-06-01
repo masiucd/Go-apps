@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"errors"
 	"fmt"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
@@ -10,16 +11,11 @@ import (
 	"strconv"
 )
 
-type ErrorData struct {
-	Message string
-	Code    int
-}
-
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	user := persistence.User(id)
 	if user == nil {
-		data := ErrorData{
+		data := lib.ErrorData{
 			Message: "User not found",
 			Code:    http.StatusNotFound,
 		}
@@ -43,7 +39,7 @@ func Users(w http.ResponseWriter, r *http.Request) {
 	users, err := persistence.Users(limit)
 
 	if err != nil {
-		data := ErrorData{
+		data := lib.ErrorData{
 			Message: "Error fetching users",
 			Code:    http.StatusInternalServerError,
 		}
@@ -75,19 +71,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	firstname := r.FormValue("firstname")
-	lastname := r.FormValue("lastname")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-
-	if firstname == "" || lastname == "" || email == "" || password == "" {
-		lib.ExecuteTemplateWithData("signup", w, "All fields are required")
+	firstname, lastname, email, password, err := validateFormValues(r)
+	if err != nil {
+		lib.ExecuteTemplateWithData("signup", w, err.Error())
 		return
 	}
 
-	exists := persistence.DoesUserExist(email)
-	if exists {
-		fmt.Println("DoesUserExist ", exists)
+	user := persistence.UserByEmail(email)
+	// if user exists, return an error
+	if user != nil {
 		lib.ExecuteTemplateWithData("signup", w, "User already exists")
 		return
 	}
@@ -95,7 +87,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := lib.HashPassword(password)
 
 	if err != nil {
-		data := ErrorData{
+		data := lib.ErrorData{
 			Message: "Error creating user",
 			Code:    http.StatusInternalServerError,
 		}
@@ -111,7 +103,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	error := persistence.InsertUser(input)
 	if error != nil {
-		data := ErrorData{
+		data := lib.ErrorData{
 			Message: "Error creating user",
 			Code:    http.StatusInternalServerError,
 		}
@@ -119,4 +111,26 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+}
+
+func validateFormValues(r *http.Request) (string, string, string, string, error) {
+	firstname := r.FormValue("firstname")
+	lastname := r.FormValue("lastname")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+
+	if isEmpty(firstname, lastname, email, password) {
+		return "", "", "", "", errors.New("all fields are required")
+	}
+
+	return firstname, lastname, email, password, nil
+}
+
+func isEmpty(values ...string) bool {
+	for _, value := range values {
+		if value == "" {
+			return true
+		}
+	}
+	return false
 }

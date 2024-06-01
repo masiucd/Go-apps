@@ -40,11 +40,14 @@ func InsertUser(input input.UserInput) error {
 	return record.Error
 }
 
-// DoesUserExist checks if a user exists in the database
-func DoesUserExist(email string) bool {
+// UserByEmail checks if a user exists in the database
+func UserByEmail(email string) *model.UserRecord {
 	sql := db.DB
 	var user model.UserRecord
 	result := sql.Where("email = ?", email).First(&user)
 	// if RowsAffected is greater than 0, then the user exists
-	return result.RowsAffected > 0
+	if result.RowsAffected == 0 {
+		return nil
+	}
+	return &user
 }
