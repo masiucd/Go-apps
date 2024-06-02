@@ -3,15 +3,10 @@ module go-apps/auth.com
 go 1.22.0
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.10
-)
-
-require (
-	github.com/google/uuid v1.6.0 // indirect
-	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gorilla/sessions v1.2.2 // indirect
 )
 
 require (
