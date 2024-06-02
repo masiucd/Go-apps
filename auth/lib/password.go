@@ -1,6 +1,10 @@
 package lib
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 // HashPassword hashes a password with bcrypt
 func HashPassword(password string) (string, error) {
@@ -14,5 +18,9 @@ func HashPassword(password string) (string, error) {
 // VerifyPassword compares a hashed password with its possible plaintext equivalent
 func VerifyPassword(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	return err == nil
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	return true
 }

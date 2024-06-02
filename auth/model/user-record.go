@@ -10,6 +10,7 @@ type UserRecord struct {
 	Password  string
 }
 
+// TableName overrides the table name instead of user_records it will be users
 func (u UserRecord) TableName() string {
 	return "users"
 }

@@ -3,6 +3,7 @@ package routes
 import (
 	"errors"
 	"fmt"
+	"go-apps/auth.com/db"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
 	"go-apps/auth.com/model"
@@ -65,6 +66,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
+	// TODO - If logged in redirect to profile
 	err := r.ParseForm()
 	if err != nil {
 		lib.ExecuteTemplateWithData("signup", w, "Error parsing form")
@@ -111,6 +113,32 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+}
+
+func Profile(w http.ResponseWriter, r *http.Request) {
+	// db.DB.Find()
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		fmt.Println("Error getting cookie", err.Error())
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	fmt.Println("c.Value", c.Value)
+	// TODO move to persistence layer
+	var sessionRecord model.SessionRecord
+	sql := db.DB
+	result := sql.Where("token = ?", c.Value).First(&sessionRecord)
+	if result.RowsAffected == 0 {
+		fmt.Println("Session not found in DB")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	fmt.Println("Session token", c.Value, result.RowsAffected, sessionRecord.Token, sessionRecord.ID, sessionRecord.Email)
+	// user := persistence.UserByEmail(sessionRecord.Email)
+
+	// w.Write([]byte("Welcome " + user.FirstName + " " + user.LastName))
+	w.Write([]byte("Welcome "))
+
 }
 
 func validateFormValues(r *http.Request) (string, string, string, string, error) {

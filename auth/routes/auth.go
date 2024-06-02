@@ -1,9 +1,15 @@
 package routes
 
 import (
+	"fmt"
+	"go-apps/auth.com/db"
 	"go-apps/auth.com/lib"
+	"go-apps/auth.com/model"
 	"go-apps/auth.com/persistence"
 	"net/http"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 // Login renders the login page - GET request
@@ -32,7 +38,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok := lib.VerifyPassword(password, user.Password)
+	ok := lib.VerifyPassword(user.Password, password)
 	if !ok {
 		data := lib.ErrorData{
 			Message: "Invalid credentials",
@@ -42,13 +48,47 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO - Implement session management
+	sessionToken := uuid.NewString()
+	expiresAt := time.Now().Add(time.Minute * 60) // 1 hour
 
-	http.Redirect(w, r, "/profile", http.StatusSeeOther)
+	sql := db.DB
+	var session model.SessionRecord
+	// TODO Before creating a new session, delete the old session if it exists
+	// result := db.DB.Where("id = ?", user.ID).Delete(&model.SessionRecord{})
+	result := sql.First(&session, user.ID)
+	// if there a session stored with the id then we delete it before creating a new one
+	fmt.Println("Session found", session, result.RowsAffected)
+	if result.RowsAffected > 0 {
+		fmt.Println("Deleting session", result.RowsAffected)
+		sql.Delete(&session)
+	}
+
+	if result.Error != nil {
+		fmt.Println("Error deleting session", result.Error)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
+
+	// store session in DB - TODO move to persistence layer
+	db.DB.Create(&model.SessionRecord{
+		UserID:    user.ID,
+		Email:     user.Email,
+		Token:     sessionToken,
+		ExpiresAt: expiresAt.Unix(),
+	})
+
+	// store session in cookie
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:    "session_token",
+	// 	Value:   sessionToken,
+	// 	Expires: expiresAt,
+	// })
+	// fmt.Println("Session token", sessionToken)
+	// http.Redirect(w, r, "/profile", http.StatusSeeOther)
+	w.Write([]byte("Login successful"))
 }
 
 // Logout logs out a user - POST request
-// TODO - Implement this
 func Logout(w http.ResponseWriter, r *http.Request) {
+	// TODO - delete session from DB
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

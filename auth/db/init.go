@@ -15,6 +15,7 @@ func ConnectDB() {
 		panic("failed to connect database")
 	}
 	db.AutoMigrate(&model.UserRecord{})
+	db.AutoMigrate(&model.SessionRecord{})
 
 	DB = db
 
