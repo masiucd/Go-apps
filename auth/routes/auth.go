@@ -2,7 +2,9 @@ package routes
 
 import (
 	"go-apps/auth.com/lib"
-	"go-apps/auth.com/persistence"
+	sessionsdao "go-apps/auth.com/persistence/sessions-dao"
+	usersdao "go-apps/auth.com/persistence/users-dao"
+
 	"net/http"
 	"time"
 
@@ -25,7 +27,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := persistence.UserByEmail(email)
+	user := usersdao.UserByEmail(email)
 	if user == nil {
 		data := lib.ErrorData{
 			Message: "User does not exist",
@@ -46,13 +48,13 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token, expiresAt := getSessionToken()
-	session := persistence.GetSessionByUserID(user.ID)
+	session := sessionsdao.GetSessionByUserID(user.ID)
 
 	if session != nil {
-		persistence.DeleteSession(user.ID)
+		sessionsdao.DeleteSession(user.ID)
 	}
 
-	persistence.CreateSession(user, token, expiresAt)
+	sessionsdao.CreateSession(user, token, expiresAt)
 
 	// store session in cookie
 	http.SetCookie(w, &http.Cookie{

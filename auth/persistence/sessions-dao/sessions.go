@@ -1,4 +1,4 @@
-package persistence
+package sessionsdao
 
 import (
 	"go-apps/auth.com/db"

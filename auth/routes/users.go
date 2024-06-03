@@ -7,14 +7,15 @@ import (
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
 	"go-apps/auth.com/model"
-	"go-apps/auth.com/persistence"
+	usersdao "go-apps/auth.com/persistence/users-dao"
+
 	"net/http"
 	"strconv"
 )
 
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	user := persistence.User(id)
+	user := usersdao.User(id)
 	if user == nil {
 		data := lib.ErrorData{
 			Message: "User not found",
@@ -37,7 +38,7 @@ func Users(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	users, err := persistence.Users(limit)
+	users, err := usersdao.Users(limit)
 
 	if err != nil {
 		data := lib.ErrorData{
@@ -79,7 +80,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := persistence.UserByEmail(email)
+	user := usersdao.UserByEmail(email)
 	// if user exists, return an error
 	if user != nil {
 		lib.ExecuteTemplateWithData("signup", w, "User already exists")
@@ -103,7 +104,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		Password:  hashedPassword,
 	}
 
-	error := persistence.InsertUser(input)
+	error := usersdao.InsertUser(input)
 	if error != nil {
 		data := lib.ErrorData{
 			Message: "Error creating user",
@@ -115,8 +116,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 }
 
+// TODO - Implement login
 func Profile(w http.ResponseWriter, r *http.Request) {
-	// db.DB.Find()
+
 	c, err := r.Cookie("session_token")
 	if err != nil {
 		fmt.Println("Error getting cookie", err.Error())
