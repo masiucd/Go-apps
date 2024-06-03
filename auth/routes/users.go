@@ -3,10 +3,10 @@ package routes
 import (
 	"errors"
 	"fmt"
-	"go-apps/auth.com/db"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
 	"go-apps/auth.com/model"
+	sessionsdao "go-apps/auth.com/persistence/sessions-dao"
 	usersdao "go-apps/auth.com/persistence/users-dao"
 
 	"net/http"
@@ -119,27 +119,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 // TODO - Implement login
 func Profile(w http.ResponseWriter, r *http.Request) {
 
-	c, err := r.Cookie("session_token")
+	cookieValue, sessionRecord, err := authenticateUser(r)
 	if err != nil {
-		fmt.Println("Error getting cookie", err.Error())
+		fmt.Println("Error authenticating user", err.Error())
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
-	}
-	fmt.Println("c.Value", c.Value)
-	// TODO move to persistence layer
-	var sessionRecord model.SessionRecord
-	sql := db.DB
-	result := sql.Where("token = ?", c.Value).First(&sessionRecord)
-	if result.RowsAffected == 0 {
-		fmt.Println("Session not found in DB")
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	fmt.Println("Session token", c.Value, result.RowsAffected, sessionRecord.Token, sessionRecord.ID, sessionRecord.Email)
-	// user := persistence.UserByEmail(sessionRecord.Email)
 
-	// w.Write([]byte("Welcome " + user.FirstName + " " + user.LastName))
-	w.Write([]byte("Welcome "))
+	}
+
+	w.Write([]byte("Welcome " + sessionRecord.Email + " to your profile" + "\n" + "Session token: " + cookieValue))
 
 }
 
@@ -163,4 +151,17 @@ func isEmpty(values ...string) bool {
 		}
 	}
 	return false
+}
+
+func authenticateUser(r *http.Request) (string, *model.SessionRecord, error) {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		return "", nil, fmt.Errorf("error getting cookie: %w", err)
+	}
+	sessionRecord := sessionsdao.GetSessionByToken(c.Value)
+	if sessionRecord == nil {
+		fmt.Println("Session not found in DB")
+		return "", nil, fmt.Errorf("session not found in DB ")
+	}
+	return c.Value, sessionRecord, nil
 }

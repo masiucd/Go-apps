@@ -34,3 +34,13 @@ func CreateSession(user *model.UserRecord, sessionToken string, expiresAt time.T
 		ExpiresAt: expiresAt.Unix(),
 	})
 }
+
+func GetSessionByToken(token string) *model.SessionRecord {
+	var sessionRecord *model.SessionRecord
+	sql := db.DB
+	result := sql.Where("token = ?", token).First(&sessionRecord)
+	if result.RowsAffected == 0 {
+		return nil
+	}
+	return sessionRecord
+}
