@@ -1,6 +1,9 @@
+# Simple auth using GO
 
+## Description
 
+This is a simple auth service using GO.
+The user can create an account, login and logout.  
+The password is hashed using bcrypt.
 
-https://me.samuelsh.com/blog/new-http-router-in-go-122?ref=dailydev
-
-
+## How to run
