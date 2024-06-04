@@ -1,9 +1,8 @@
 package routes
 
 import (
+	authmanager "go-apps/auth.com/biz/auth-manager"
 	"go-apps/auth.com/lib"
-	sessionsdao "go-apps/auth.com/persistence/sessions-dao"
-	usersdao "go-apps/auth.com/persistence/users-dao"
 
 	"net/http"
 	"time"
@@ -27,7 +26,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := usersdao.UserByEmail(email)
+	user := authmanager.UserByEmail(email)
 	if user == nil {
 		data := lib.ErrorData{
 			Message: "User does not exist",
@@ -47,14 +46,13 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, expiresAt := generateSessionToken()
-	session := sessionsdao.GetSessionByUserID(user.ID)
-
+	session := authmanager.GetSessionByUserId(user.ID)
 	if session != nil {
-		sessionsdao.DeleteSession(user.ID)
+		authmanager.DeleteSession(user.ID)
 	}
 
-	sessionsdao.CreateSession(user, token, expiresAt)
+	token, expiresAt := generateSessionToken()
+	authmanager.CreateSession(user, token, expiresAt)
 
 	// store session in cookie
 	http.SetCookie(w, &http.Cookie{
@@ -73,9 +71,9 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	session := sessionsdao.GetSessionByToken(c.Value)
+	session := authmanager.GetSessionByToken(c.Value)
 	if session != nil {
-		err := sessionsdao.DeleteSession(session.UserID)
+		err := authmanager.DeleteSession(session.UserID)
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return

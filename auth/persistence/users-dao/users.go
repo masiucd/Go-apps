@@ -17,7 +17,7 @@ func Users(limit int) ([]*model.UserRecord, error) {
 	return users, nil
 }
 
-func User(id string) *model.UserRecord {
+func User(id uint) *model.UserRecord {
 	sql := db.DB
 	var user *model.UserRecord
 	result := sql.First(&user, id)

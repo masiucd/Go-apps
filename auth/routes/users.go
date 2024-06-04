@@ -3,11 +3,10 @@ package routes
 import (
 	"errors"
 	"fmt"
+	usermanager "go-apps/auth.com/biz/user-manager"
 	"go-apps/auth.com/input"
 	"go-apps/auth.com/lib"
 	"go-apps/auth.com/model"
-	sessionsdao "go-apps/auth.com/persistence/sessions-dao"
-	usersdao "go-apps/auth.com/persistence/users-dao"
 
 	"net/http"
 	"strconv"
@@ -15,7 +14,7 @@ import (
 
 func UserById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	user := usersdao.User(id)
+	user := usermanager.GetUserById(id)
 	if user == nil {
 		data := lib.ErrorData{
 			Message: "User not found",
@@ -38,7 +37,7 @@ func Users(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	users, err := usersdao.Users(limit)
+	users, err := usermanager.GetUsers(limit)
 
 	if err != nil {
 		data := lib.ErrorData{
@@ -48,7 +47,6 @@ func Users(w http.ResponseWriter, r *http.Request) {
 		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
-	fmt.Println(users[0].LastName)
 	data := struct {
 		Users []*model.UserRecord
 		Title string
@@ -67,7 +65,12 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	// TODO - If logged in redirect to profile
+	// if user is already authenticated, redirect to profile
+	if _, err := authenticateUser(r); err == nil {
+		http.Redirect(w, r, "/profile", http.StatusSeeOther)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		lib.ExecuteTemplateWithData("signup", w, "Error parsing form")
@@ -80,7 +83,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := usersdao.UserByEmail(email)
+	user := usermanager.GetUserByEmail(email)
 	// if user exists, return an error
 	if user != nil {
 		lib.ExecuteTemplateWithData("signup", w, "User already exists")
@@ -97,14 +100,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		lib.ExecuteTemplateWithData("error", w, data)
 		return
 	}
-	input := input.UserInput{
-		FirstName: firstname,
-		LastName:  lastname,
-		Email:     email,
-		Password:  hashedPassword,
-	}
 
-	error := usersdao.InsertUser(input)
+	error := usermanager.CreateUser(
+		input.UserInput{
+			FirstName: firstname,
+			LastName:  lastname,
+			Email:     email,
+			Password:  hashedPassword,
+		},
+	)
 	if error != nil {
 		data := lib.ErrorData{
 			Message: "Error creating user",
@@ -124,7 +128,7 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := usersdao.UserByEmail(sessionRecord.Email)
+	user := usermanager.GetUserByEmail(sessionRecord.Email)
 	if user == nil {
 		fmt.Println("User not found")
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -173,7 +177,7 @@ func authenticateUser(r *http.Request) (*model.SessionRecord, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error getting cookie: %w", err)
 	}
-	sessionRecord := sessionsdao.GetSessionByToken(c.Value)
+	sessionRecord := usermanager.GetSessionByToken(c.Value)
 	if sessionRecord == nil {
 		fmt.Println("Session not found in DB")
 		return nil, fmt.Errorf("session not found in DB ")
