@@ -116,18 +116,33 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 }
 
-// TODO - Implement login
 func Profile(w http.ResponseWriter, r *http.Request) {
-
-	cookieValue, sessionRecord, err := authenticateUser(r)
+	sessionRecord, err := authenticateUser(r)
 	if err != nil {
 		fmt.Println("Error authenticating user", err.Error())
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
-
 	}
 
-	w.Write([]byte("Welcome " + sessionRecord.Email + " to your profile" + "\n" + "Session token: " + cookieValue))
+	user := usersdao.UserByEmail(sessionRecord.Email)
+	if user == nil {
+		fmt.Println("User not found")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	type ProfileData struct {
+		Title     string
+		Email     string
+		FirstName string
+		LastName  string
+	}
+
+	lib.ExecuteTemplateWithData("profile", w, ProfileData{
+		Title:     "Profile",
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	})
 
 }
 
@@ -153,15 +168,15 @@ func isEmpty(values ...string) bool {
 	return false
 }
 
-func authenticateUser(r *http.Request) (string, *model.SessionRecord, error) {
+func authenticateUser(r *http.Request) (*model.SessionRecord, error) {
 	c, err := r.Cookie("session_token")
 	if err != nil {
-		return "", nil, fmt.Errorf("error getting cookie: %w", err)
+		return nil, fmt.Errorf("error getting cookie: %w", err)
 	}
 	sessionRecord := sessionsdao.GetSessionByToken(c.Value)
 	if sessionRecord == nil {
 		fmt.Println("Session not found in DB")
-		return "", nil, fmt.Errorf("session not found in DB ")
+		return nil, fmt.Errorf("session not found in DB ")
 	}
-	return c.Value, sessionRecord, nil
+	return sessionRecord, nil
 }

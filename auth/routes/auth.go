@@ -47,7 +47,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, expiresAt := getSessionToken()
+	token, expiresAt := generateSessionToken()
 	session := sessionsdao.GetSessionByUserID(user.ID)
 
 	if session != nil {
@@ -68,11 +68,29 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 // Logout logs out a user - POST request
 func Logout(w http.ResponseWriter, r *http.Request) {
-	// TODO - delete session from DB
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	session := sessionsdao.GetSessionByToken(c.Value)
+	if session != nil {
+		err := sessionsdao.DeleteSession(session.UserID)
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		} else {
+			http.SetCookie(w, &http.Cookie{
+				Name:    "session_token",
+				Value:   "",
+				Expires: time.Now().Add(-time.Hour),
+			})
+		}
+	}
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
-func getSessionToken() (string, time.Time) {
+func generateSessionToken() (string, time.Time) {
 	sessionToken := uuid.NewString()
 	expiresAt := time.Now().Add(time.Minute * 60) // 1 hour
 	return sessionToken, expiresAt
