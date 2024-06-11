@@ -4,17 +4,13 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/fatih/color"
 	"github.com/rodaine/table"
 )
 
 func main() {
-	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
-	columnFmt := color.New(color.FgYellow).SprintfFunc()
-
-	tbl := table.New("SeriesReference", "Period", "Type", "DataValue", "Lower_CI", "Units", "Indicator", "Cause", "Validation", "Population", "Age", "Severity")
-	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
 
 	file, err := os.Open("file-1.csv")
 	if err != nil {
@@ -25,30 +21,42 @@ func main() {
 	reader := csv.NewReader(file)
 	reader.FieldsPerRecord = -1 // Accept variable number of fields per line
 
-	data, err := reader.ReadAll()
-	if err != nil {
-		panic(err)
+	// remove first row
+	reader.Read()
+
+	var wg sync.WaitGroup
+	rowChan := make(chan []string) // Channel to send rows to
+
+	go func() {
+		for {
+			row, err := reader.Read()
+			if err != nil {
+				close(rowChan) // Close the channel when we reach the end of the file
+				break
+			}
+			rowChan <- row // Send the row to the channel
+		}
+	}()
+	tbl := prepareTable()
+	for row := range rowChan {
+		wg.Add(1)
+		go func(row []string) {
+			defer wg.Done()
+			tbl.AddRow(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
+		}(row)
 	}
 
-	for _, row := range data[1:] {
-
-		tbl.AddRow(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
-	}
+	wg.Wait()
 	tbl.Print()
 
 }
 
-// type InjuryItem struct {
-// 	SeriesReference string `csv:Series_reference`
-// 	Period          string `csv:Period`
-// 	Type            string `csv:Type`
-// 	DataValue       string `csv:Data_value`
-// 	Lower_CI        string `csv:Lower_CI`
-// 	Units           string `csv:Units`
-// 	Indicator       string `csv:Indicator`
-// 	Cause           string `csv:Cause`
-// 	Validation      string `csv:Validation`
-// 	Population      string `csv:Population`
-// 	Age             string `csv:Age`
-// 	Severity        string `csv:Severity`
-// }
+func prepareTable() table.Table {
+	headerFmt := color.New(color.FgBlue, color.Underline, color.Bold).SprintfFunc()
+	columnFmt := color.New(color.FgHiRed).SprintfFunc()
+
+	tbl := table.New("Reference", "Period", "Type", "DataValue", "Lower_CI", "Units", "Indicator", "Cause", "Validation", "Population", "Age", "Severity")
+	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt).WithPadding(2)
+
+	return tbl
+}
