@@ -7,8 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fatih/color"
-	"github.com/rodaine/table"
+	"go-apps.com/injury-statistics/lib"
 )
 
 func main() {
@@ -21,30 +20,20 @@ func main() {
 	reader := csv.NewReader(file)
 	reader.FieldsPerRecord = -1 // Accept variable number of fields per line
 
-	removeCSVHeaders(reader)
+	lib.RemoveCSVHeaders(reader)
 
 	rowChan := make(chan []string) // Channel to send rows to
 	start := time.Now()
-	// Read the file in a separate goroutine
-	go func() {
-		for {
-			row, err := reader.Read()
-			if err != nil {
-				close(rowChan) // Close the channel when we reach the end of the file
-				break
-			}
-			rowChan <- row // Send the row to the channel
-		}
-	}()
 
-	tbl := prepareTable()
+	go readCSVRows(reader, rowChan)
+
+	tbl := lib.PrepareTable()
 	var wg sync.WaitGroup
 	for row := range rowChan {
 		wg.Add(1)
 		go func(row []string) {
 			defer wg.Done()
 			tbl.AddRow(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
-
 		}(row)
 	}
 
@@ -55,16 +44,16 @@ func main() {
 
 }
 
-func prepareTable() table.Table {
-	headerFmt := color.New(color.FgBlue, color.Underline, color.Bold).SprintfFunc()
-	columnFmt := color.New(color.FgCyan, color.BlinkRapid, color.Bold).SprintfFunc()
-	tbl := table.New("Ref", "Period", "Type", "DataValue", "L_CI", "U_CI", "Units", "Indicator", "Cause", "Validation", "Population", "Age").WithPadding(2)
-	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
-	return tbl
-}
-
-// removeCSVHeaders removes the headers from the CSV file
-func removeCSVHeaders(reader *csv.Reader) {
-	// remove first row of headers
-	reader.Read()
+// readCSVRows reads rows from a CSV reader and sends them to a channel.
+// It continues reading until an error occurs or the end of the file is reached.
+// Upon encountering an error or EOF, it closes the channel to signal completion.
+func readCSVRows(reader *csv.Reader, rowChan chan []string) {
+	for {
+		row, err := reader.Read() // Attempt to read the next row from the CSV.
+		if err != nil {
+			close(rowChan) // Close the channel on error or EOF (End of line) to signal no more rows.
+			break
+		}
+		rowChan <- row // Send the successfully read row to the channel.
+	}
 }
