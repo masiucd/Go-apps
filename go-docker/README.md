@@ -36,4 +36,6 @@ docker run -d -p 8080:8080 go-app
 
 ### Access the app in a web browser
 
+---
+
 [http://localhost:8080](http://localhost:8080)
