@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a simple Go app that runs in a Docker container. The app listens on port 8080 and returns a simple message when accessed via a web browser.
+This is a simple Go app that runs in a Docker container. The app listens on port 3000 and returns a simple message when accessed via a web browser.
 
 ## Why Docker
 
@@ -31,7 +31,7 @@ docker build -t go-app .
 ### Command to run the Docker container
 
 ```bash
-docker run -d -p 8080:8080 go-app
+docker run -d -p 3000:3000 go-app # -d flag runs the container in detached mode and -p flag maps the host port to the container port, 3000:3000 - host:container
 ```
 
 ### Access the app in a web browser
