@@ -1,24 +1,16 @@
-# Description: Dockerfile for building the Go application
-FROM golang:1.21-alpine
+FROM golang:1.22
 
-# Set the Current Working Directory inside the container
+
 WORKDIR /app
 
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
 
-# Download all the dependencies
-RUN go mod init go-apps/go-docker.com
-RUN go mod tidy
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
-
-# Build the Go app
-RUN go build -o main .
+COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /go-docker-mcd
 
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+EXPOSE 3000
 
-
-# Command to run the executable
-CMD ["./main"]
+CMD ["/go-docker-mcd"]
