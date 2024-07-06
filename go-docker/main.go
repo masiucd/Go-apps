@@ -13,11 +13,10 @@ func isGreaterThanOne(n int) bool {
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fn := fp.Filter(isGreaterThanOne)
+		res := fn([]int{1, 2, 3, 4, 5})
+		fmt.Println(res)
 		w.Write([]byte("Hello World! from Go using Docker!"))
 	})
-	fn := fp.Filter(isGreaterThanOne)
-	res := fn([]int{1, 2, 3, 4, 5})
-	fmt.Println(res)
-	fmt.Println("Hello World! from Go using Docker!")
 	http.ListenAndServe(":3000", nil)
 }

@@ -36,6 +36,36 @@ docker run -d -p 3000:3000 go-app # -d flag runs the container in detached mode 
 
 ### Access the app in a web browser
 
----
+[http://localhost:3000](http://localhost:3000)
 
-[http://localhost:8080](http://localhost:8080)
+### Command to check the running container
+
+```bash
+docker ps
+```
+
+### Docker commands
+
+```bash
+
+docker ps # List all running containers
+docker ps -a # List all containers
+docker stop <container_id> # Stop a running container
+docker rm <container_id> # Remove a container
+docker images # List all images
+docker rmi <image_id> # Remove an image
+```
+
+### Docker keywords meaning
+
+- **FROM**: The base image to build the new image on top of.
+- **WORKDIR**: The working directory inside the container.
+- **COPY**: Copy files from the host to the container.
+- **RUN**: Run a command inside the container.
+- **EXPOSE**: Expose a port to the host machine.
+- **CMD**: The command to run when the container starts.
+- **ENTRYPOINT**: The entry point for the container.
+- **ENV**: Set environment variables inside the container.
+- **ARG**: Define build-time variables.
+- **VOLUME**: Create a mount point for a volume.
+- **USER**: Set the user or UID to run the container.
