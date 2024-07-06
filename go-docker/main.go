@@ -18,5 +18,12 @@ func main() {
 		fmt.Println(res)
 		w.Write([]byte("Hello World! from Go using Docker!"))
 	})
+
+	http.HandleFunc("/:id", func(w http.ResponseWriter, r *http.Request) {
+		id := r.URL.Query().Get("id")
+		message := fmt.Sprintf("Route entered with id: %s", id)
+		w.Write([]byte(message))
+	})
+
 	http.ListenAndServe(":3000", nil)
 }
