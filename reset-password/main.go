@@ -28,7 +28,6 @@ func getAllUsers() []User {
 
 	var users []User
 	for rows.Next() {
-		fmt.Println("Row")
 		var user User
 		err = rows.Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
 		if err != nil {
@@ -54,8 +53,6 @@ func getUserByName(name string) User {
 			log.Fatal(err)
 		}
 	}
-
-	// .Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
 
 	return user
 
