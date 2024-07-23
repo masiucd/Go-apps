@@ -19,9 +19,57 @@ type User struct {
 
 var DB *sql.DB
 
+func getAllUsers() []User {
+	rows, err := DB.Query(`SELECT * FROM users`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		fmt.Println("Row")
+		var user User
+		err = rows.Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+		if err != nil {
+			log.Fatal(err)
+
+		}
+		users = append(users, user)
+	}
+	return users
+}
+
+func getUserByName(name string) User {
+	var user User
+	sqlStatement := fmt.Sprintf(`SELECT * FROM users WHERE name like  '%%%s%%' `, name)
+	row, err := DB.Query(sqlStatement, name)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for row.Next() {
+		err = row.Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	// .Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+
+	return user
+
+}
+
 func main() {
 	db := ConnectDB()
 	defer db.Close()
+
+	users := getAllUsers()
+	fmt.Println(users)
+
+	user := getUserByName("John")
+	fmt.Println("user", user)
 
 	// http.HandleFunc("/tasks", tasksHandler)
 	// http.HandleFunc("/tasks/", taskHandler)
